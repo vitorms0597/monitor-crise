@@ -1,0 +1,52 @@
+---
+import Page from '../layouts/Page.astro';
+---
+
+<Page title="Metodologia" description="Fontes, critérios de classificação e como o Monitor de Crises calcula o calor de cada país.">
+  <p>
+    Tudo o que aparece no site é gerado automaticamente a partir das fontes abaixo, sem edição manual. O código que classifica e
+    calcula os números segue as regras descritas nesta página.
+  </p>
+
+  <h2>Fontes</h2>
+  <table>
+    <thead><tr><th>Fonte</th><th>O que fornece</th><th>Tipo</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://earthquake.usgs.gov/">USGS</a> (Serviço Geológico dos EUA)</td><td>Terremotos de magnitude 4,5 ou mais no mundo todo</td><td>registro oficial</td></tr>
+      <tr><td><a href="https://www.gdacs.org/">GDACS</a> (ONU e Comissão Europeia)</td><td>Alertas de ciclones, enchentes, vulcões, secas e incêndios</td><td>registro oficial</td></tr>
+      <tr><td><a href="https://eonet.gsfc.nasa.gov/">NASA EONET</a></td><td>Incêndios, tempestades, vulcões e enchentes detectados por satélite</td><td>registro oficial</td></tr>
+      <tr><td><a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog">CISA KEV</a> (agência de cibersegurança dos EUA)</td><td>Falhas de software que estão sendo exploradas por atacantes</td><td>registro oficial</td></tr>
+      <tr><td><a href="https://www.gdeltproject.org/">GDELT</a></td><td>Monitoramento de notícias de milhares de veículos no mundo, atualizado a cada 15 minutos</td><td>imprensa</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Como uma notícia entra</h2>
+  <p>
+    Uma notícia só é contada quando o <strong>título</strong> trata de um dos quatro temas (por exemplo "apagão", "ransomware",
+    "míssil", "terremoto", em português, inglês ou espanhol). Os temas detectados no texto pelo GDELT servem apenas para desempatar.
+    Usos figurados como "guerra comercial" ou "guerra de preços" são descartados. O país de cada notícia é o país mais citado no
+    texto.
+  </p>
+
+  <h2>Nível dos eventos oficiais (1 a 5)</h2>
+  <ul>
+    <li><strong>Terremotos:</strong> nível 1 abaixo de M5,5; 2 até M6,5; 3 até M7,5; 4 acima disso. O alerta PAGER do USGS soma de 1 a 3 níveis.</li>
+    <li><strong>GDACS:</strong> alerta verde = 1, laranja = 3, vermelho = 5. Alertas verdes de queimada e seca são ignorados porque são dezenas por dia.</li>
+    <li><strong>NASA EONET:</strong> incêndios = 1; tempestades, vulcões, enchentes e deslizamentos = 2.</li>
+    <li><strong>CISA:</strong> falha explorada = 2; ligada a ransomware = 3.</li>
+  </ul>
+
+  <h2>Como o calor é calculado</h2>
+  <p>
+    Para cada país e tema, o calor é o número de notícias no período mais os pontos dos eventos oficiais: nível 1 vale 1, nível 2
+    vale 3, nível 3 vale 6, nível 4 vale 10 e nível 5 vale 15. Um terremoto pequeno pesa como uma notícia; um alerta vermelho da ONU
+    pesa como 15. A variação compara as últimas 24 horas com as 24 horas anteriores. O sismograma mostra o mesmo cálculo hora a hora.
+  </p>
+
+  <h2>Limitações</h2>
+  <ul>
+    <li>Países com mais imprensa (como os Estados Unidos) tendem a ter mais registros. Calor alto significa <em>mais falado</em>, não necessariamente <em>mais grave</em>.</li>
+    <li>A maioria das manchetes está em inglês, no idioma original da fonte.</li>
+    <li>A classificação por palavras-chave erra às vezes. Se encontrar um registro fora do lugar, <a href="/contato/">avise</a>.</li>
+  </ul>
+</Page>

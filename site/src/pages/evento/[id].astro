@@ -1,0 +1,148 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import Feed from '../../components/Feed.astro';
+import { SUBTEMAS, temaById } from '../../config';
+import { countries, countryName, eventSlug, featuredEvents, feed, hasCountryPage } from '../../lib/data';
+import { dataHora, dataLonga } from '../../lib/format';
+import { MAP_H, MAP_W, worldMap } from '../../lib/map';
+import { eventDescription } from '../../lib/texts';
+
+export function getStaticPaths() {
+  return featuredEvents().map((e) => ({ params: { id: eventSlug(e.id) }, props: { e } }));
+}
+const { e } = Astro.props;
+const tema = temaById[e.tema];
+const country = e.pais_iso ? countries()[e.pais_iso] : null;
+const { shapes, graticule, project } = worldMap();
+const xy = e.lat !== null && e.lon !== null ? project(e.lon, e.lat) : null;
+// sem país (alto-mar ou falha global), relaciona pelo mesmo tipo de evento
+const related = (e.pais_iso ? feed({ iso: e.pais_iso, tema: e.tema, limit: 12 }) : feed({ tema: e.tema, limit: 200 }).filter((x) => x.subtema === e.subtema))
+  .filter((x) => x.id !== e.id)
+  .slice(0, 12);
+const place = e.pais_iso ? countryName(e.pais_iso) : e.lat !== null ? 'Alto-mar' : 'Global';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: e.titulo,
+  startDate: e.publicado_em,
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: { '@type': 'Place', name: place, ...(e.lat !== null && { geo: { '@type': 'GeoCoordinates', latitude: e.lat, longitude: e.lon } }) },
+  url: e.fonte_url,
+};
+---
+
+<Base title={e.titulo} description={eventDescription(e)} jsonLd={jsonLd}>
+  <article class="wrap intro">
+    <p class="label">
+      <a href={`/tema/${tema.slug}/`}>{tema.nome}</a> / {SUBTEMAS[e.subtema] ?? e.subtema}
+    </p>
+    <h1>{e.titulo}</h1>
+    <dl class="facts">
+      <div><dt class="label">nível</dt><dd class="num amber">{e.severidade}/5</dd></div>
+      <div><dt class="label">início</dt><dd class="num">{dataHora(e.publicado_em)}</dd></div>
+      <div><dt class="label">atualizado</dt><dd class="num">{dataHora(e.atualizado_em)}</dd></div>
+      <div>
+        <dt class="label">local</dt>
+        <dd>{country && hasCountryPage(country.iso3) ? <a href={`/pais/${country.slug}/`}>{country.nome}</a> : place}</dd>
+      </div>
+    </dl>
+    <div class="prose">
+      <p>
+        Evento registrado pela fonte oficial <strong>{e.fonte}</strong> em {dataLonga(e.publicado_em)}. O nível {e.severidade} de 5 segue a
+        escala do Monitor de Crises, explicada na <a href="/metodologia/">metodologia</a>.
+      </p>
+      {e.lat !== null && <p class="num coords">Coordenadas: {e.lat.toFixed(2)}, {e.lon!.toFixed(2)}</p>}
+      <p><a class="src" href={e.fonte_url} target="_blank" rel="noopener">Ver o registro original em {e.fonte} ↗</a></p>
+    </div>
+    {
+      xy && (
+        <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} class="map" role="img" aria-label={`Localização no mapa: ${place}`}>
+          <path d={graticule} class="graticule" />
+          {shapes.map((s) => <path d={s.d} class:list={['land', { here: s.iso3 === e.pais_iso }]} />)}
+          <circle cx={xy[0]} cy={xy[1]} r="14" class="ring" />
+          <circle cx={xy[0]} cy={xy[1]} r="3.5" class="pin" />
+        </svg>
+      )
+    }
+  </article>
+
+  <div class="wrap"><AdSlot slot="evento-1" /></div>
+
+  {
+    related.length > 0 && (
+      <section class="wrap section narrow" aria-labelledby="rel">
+        <div class="section-head"><h2 id="rel">Registros relacionados</h2></div>
+        <Feed items={related} />
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .intro {
+    padding-top: clamp(24px, 4vw, 48px);
+  }
+  .intro > .label a {
+    text-decoration: none;
+  }
+  h1 {
+    margin-top: 8px;
+    font-size: clamp(1.7rem, 4vw, 3rem);
+    font-weight: 700;
+    font-stretch: 84%;
+    letter-spacing: -0.025em;
+    max-width: 24ch;
+  }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 40px;
+    margin: 20px 0;
+    padding: 14px 0;
+    border-block: 1px solid var(--graphite);
+  }
+  .facts dd {
+    margin: 2px 0 0;
+    font-size: 1.15rem;
+    font-weight: 620;
+  }
+  .coords {
+    color: var(--ash);
+  }
+  .src {
+    color: var(--amber);
+    font-weight: 600;
+  }
+  .map {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 28px;
+  }
+  .graticule {
+    fill: none;
+    stroke: var(--graphite);
+    stroke-width: 0.6;
+  }
+  .land {
+    fill: var(--heat-0);
+    stroke: var(--soot);
+    stroke-width: 0.5;
+  }
+  .land.here {
+    fill: var(--heat-2);
+  }
+  .ring {
+    fill: none;
+    stroke: var(--amber);
+    stroke-width: 1.5;
+  }
+  .pin {
+    fill: var(--bone);
+  }
+  .narrow {
+    max-width: 900px;
+    margin-left: max(0px, calc((100vw - var(--max)) / 2));
+  }
+</style>

@@ -1,0 +1,27 @@
+---
+import Page from '../layouts/Page.astro';
+import { SITE_NAME } from '../config';
+---
+
+<Page title="Sobre" description={`O que é o ${SITE_NAME}, de onde vêm os dados e como o site se mantém.`}>
+  <p>
+    O {SITE_NAME} reúne, em português, o que está acontecendo no mundo em quatro temas: guerras e conflitos, ciberataques,
+    apagões e desastres naturais. A cada 30 minutos um programa coleta dados de fontes primárias, como agências geológicas,
+    sistemas de alerta da ONU, a NASA e o monitoramento da imprensa mundial, e redesenha o mapa e o sismograma.
+  </p>
+  <p>
+    O site não tem redação nem linha editorial. Não escrevemos opinião nem reescrevemos manchetes. Cada registro leva o link
+    para a fonte original, para que você confira por conta própria.
+  </p>
+  <h2>Por que "sismograma"</h2>
+  <p>
+    Um sismógrafo não interpreta o terremoto, apenas registra a vibração. É o que este site tenta fazer com as crises: mostrar
+    onde e quanto o mundo está tremendo, hora a hora.
+  </p>
+  <h2>Como o site se mantém</h2>
+  <p>
+    O site é gratuito e se mantém com anúncios exibidos em espaços marcados como "Publicidade". Os anunciantes não têm
+    nenhuma influência sobre os dados.
+  </p>
+  <p>Dúvidas, correções e sugestões: veja a página de <a href="/contato/">contato</a>.</p>
+</Page>

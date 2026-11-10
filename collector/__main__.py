@@ -15,6 +15,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-dir", default="data")
     ap.add_argument("--only", help="fontes separadas por vírgula (padrão: todas)")
+    ap.add_argument("--backfill-horas", type=int, help="reprocessa as últimas N horas do GDELT")
     args = ap.parse_args(argv)
     only = set(args.only.split(",")) if args.only else None
     store = Store(args.data_dir)
@@ -42,7 +43,7 @@ def main(argv=None):
         try:
             last = state.get("gdelt_ultimo")
             news, done = gdelt.fetch(datetime.fromisoformat(last) if last else None,
-                                     log=lambda m: print(m, file=sys.stderr))
+                                     log=lambda m: print(m, file=sys.stderr), backfill_hours=args.backfill_horas)
             kept, fresh = store.merge_news(news, now)
             if done:
                 state["gdelt_ultimo"] = done.isoformat()

@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import Feed from '../../components/Feed.astro';
+import Seismogram from '../../components/Seismogram.astro';
+import { TEMAS } from '../../config';
+import { countryPages, feed, heat, hourAxis, hourly } from '../../lib/data';
+import { num, pct } from '../../lib/format';
+import { countrySummary } from '../../lib/texts';
+
+export function getStaticPaths() {
+  return countryPages().map((c) => ({ params: { slug: c.slug }, props: { country: c } }));
+}
+const { country } = Astro.props;
+const axis = hourAxis();
+const series = hourly()[country.iso3];
+const bands = TEMAS.map((t) => {
+  const values = series?.[t.id] ?? new Array(axis.length).fill(0);
+  return { label: t.nome, href: `/tema/${t.slug}/`, values, total: values.reduce((a, b) => a + b, 0) };
+}).filter((b) => b.total > 0);
+const summary = countrySummary(country.iso3);
+const p24 = heat('24h').paises[country.iso3];
+const p7 = heat('7d').paises[country.iso3];
+const pos = heat('24h').ranking.indexOf(country.iso3);
+const items = feed({ iso: country.iso3, limit: 50 });
+const title = `${country.nome}: guerras, ciberataques, apagões e desastres agora`;
+---
+
+<Base title={title} description={summary.slice(0, 2).join(' ')}>
+  <section class="wrap intro">
+    <p class="label"><a href="/paises/">Países</a></p>
+    <h1>{country.nome}</h1>
+    <dl class="facts">
+      <div><dt class="label">últimas 24h</dt><dd class="num">{num(p24?.total ?? 0)}</dd></div>
+      <div><dt class="label">variação</dt><dd class="num amber">{p24 ? pct(p24.variacao) : '—'}</dd></div>
+      <div><dt class="label">7 dias</dt><dd class="num">{num(p7?.total ?? 0)}</dd></div>
+      <div><dt class="label">posição hoje</dt><dd class="num">{pos >= 0 ? `${pos + 1}º` : '—'}</dd></div>
+    </dl>
+    <div class="lede">{summary.map((s) => <p>{s}</p>)}</div>
+  </section>
+
+  {
+    bands.length > 0 && (
+      <section class="wrap">
+        <Seismogram bands={bands} axis={axis} caption={`Registros por hora ligados a ${country.nome} nas últimas 72 horas.`} />
+      </section>
+    )
+  }
+
+  <div class="wrap"><AdSlot slot="pais-1" /></div>
+
+  <section class="wrap section narrow" aria-labelledby="registros">
+    <div class="section-head"><h2 id="registros">Registros recentes</h2></div>
+    <Feed items={items} showCountry={false} />
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-top: clamp(24px, 4vw, 48px);
+    padding-bottom: 24px;
+  }
+  .intro .label a {
+    text-decoration: none;
+  }
+  h1 {
+    margin-top: 8px;
+    font-size: clamp(2.2rem, 6vw, 4.6rem);
+    font-weight: 700;
+    font-stretch: 82%;
+    letter-spacing: -0.03em;
+  }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 40px;
+    margin: 20px 0 0;
+    padding: 14px 0;
+    border-block: 1px solid var(--graphite);
+  }
+  .facts dd {
+    margin: 2px 0 0;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 650;
+    font-stretch: 85%;
+  }
+  .lede {
+    margin-top: 18px;
+    max-width: 66ch;
+    color: var(--bone-dim);
+    font-size: 1.05rem;
+  }
+  .lede p + p {
+    margin-top: 0.5em;
+  }
+  .narrow {
+    max-width: 900px;
+    margin-left: max(0px, calc((100vw - var(--max)) / 2));
+  }
+</style>

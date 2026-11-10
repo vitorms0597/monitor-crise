@@ -1,0 +1,179 @@
+@import '@fontsource-variable/archivo/wdth.css';
+
+/* Papel enfumaçado de sismógrafo: fuligem, traço riscado em branco-osso, grade grafite, lápis âmbar. */
+:root {
+  --soot: #121110;
+  --soot-raised: #1a1917;
+  --soot-deep: #0c0b0a;
+  --graphite: #2c2a27;
+  --graphite-2: #3e3b37;
+  --ash: #8f887d; /* rótulos sobre fuligem: 5.6:1 */
+  --bone-dim: #b4ada0;
+  --bone: #ede6d6;
+  --amber: #e8a33d;
+  --amber-soft: #f3c77e;
+
+  /* escala de calor: fuligem fria → brasa → branco-osso */
+  --heat-0: #1f1d1b;
+  --heat-1: #3b2a17;
+  --heat-2: #6b4416;
+  --heat-3: #a8661b;
+  --heat-4: #e8a33d;
+  --heat-5: #f6dba6;
+
+  --font: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --gutter: clamp(16px, 4vw, 40px);
+  --max: 1280px;
+  --rule: 1px solid var(--graphite);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--soot);
+  color: var(--bone);
+  font-family: var(--font);
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  /* grade milimetrada do papel do tambor */
+  background-image:
+    linear-gradient(var(--soot-deep) 1px, transparent 1px),
+    linear-gradient(90deg, var(--soot-deep) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--graphite-2);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  text-decoration-color: var(--amber);
+}
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 640;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* rótulo condensado, como as anotações do observatório na margem do sismograma */
+.label {
+  font-stretch: 72%;
+  font-weight: 560;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+.amber {
+  color: var(--amber);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.section {
+  padding-block: clamp(40px, 6vw, 72px) 0;
+}
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: var(--rule);
+  margin-bottom: 16px;
+}
+.section-head h2 {
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  flex: none;
+}
+.section-head > .label {
+  text-align: right;
+}
+@media (max-width: 560px) {
+  .section-head {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .section-head > .label {
+    text-align: left;
+  }
+}
+
+.prose {
+  max-width: 68ch;
+  color: var(--bone);
+}
+.prose p + p,
+.prose ul,
+.prose h2 {
+  margin-top: 1em;
+}
+.prose h2 {
+  font-size: 1.3rem;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+}
+.prose h2 + p {
+  margin-top: 0;
+}
+.prose li + li {
+  margin-top: 0.4em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

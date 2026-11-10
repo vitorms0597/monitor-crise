@@ -1,0 +1,104 @@
+---
+import { SUBTEMAS, temaById } from '../config';
+import { countryName, eventSlug, featuredEvents, type Item } from '../lib/data';
+import { IDIOMAS, dataHora } from '../lib/format';
+
+interface Props {
+  items: Item[];
+  showCountry?: boolean;
+  showTema?: boolean;
+}
+const { items, showCountry = true, showTema = true } = Astro.props;
+const featured = new Set(featuredEvents().map((e) => e.id));
+---
+
+{
+  items.length === 0 ? (
+    <p class="empty">Nenhum registro neste período. O coletor roda a cada 30 minutos; volte mais tarde.</p>
+  ) : (
+    <ol class="feed">
+      {items.map((e) => (
+        <li class:list={[e.tipo]}>
+          <time class="num" datetime={e.atualizado_em}>
+            {dataHora(e.atualizado_em)}
+          </time>
+          <div class="body">
+            <div class="meta label">
+              {showTema && <span>{SUBTEMAS[e.subtema] ?? temaById[e.tema].curto}</span>}
+              {showCountry && <span>{countryName(e.pais_iso)}</span>}
+              {e.tipo === 'evento' ? (
+                <span class="amber">registro oficial · nível {e.severidade}/5</span>
+              ) : (
+                <span>imprensa{e.idioma !== 'pt' && ` · ${IDIOMAS[e.idioma] ?? e.idioma.toUpperCase()}`}</span>
+              )}
+            </div>
+            {featured.has(e.id) ? (
+              <a class="title" href={`/evento/${eventSlug(e.id)}/`}>
+                {e.titulo}
+              </a>
+            ) : (
+              <a class="title" href={e.fonte_url} target="_blank" rel="noopener nofollow" lang={e.idioma === 'pt' ? undefined : e.idioma}>
+                {e.titulo}
+              </a>
+            )}
+            <span class="src">{e.fonte}</span>
+          </div>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+<style>
+  .feed {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .feed li {
+    display: grid;
+    grid-template-columns: 7.5em minmax(0, 1fr);
+    gap: 4px 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--graphite);
+  }
+  @media (max-width: 560px) {
+    .feed li {
+      grid-template-columns: 1fr;
+    }
+  }
+  time {
+    color: var(--ash);
+    font-size: 0.85rem;
+    padding-top: 2px;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+    font-size: 0.7rem;
+  }
+  .title {
+    display: block;
+    margin-top: 3px;
+    font-size: 1.02rem;
+    font-weight: 520;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+  .title:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--amber);
+  }
+  .evento .title {
+    font-weight: 620;
+  }
+  .src {
+    font-size: 0.8rem;
+    color: var(--ash);
+  }
+  .empty {
+    color: var(--bone-dim);
+    padding: 24px 0;
+  }
+</style>

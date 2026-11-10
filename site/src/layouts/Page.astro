@@ -1,0 +1,49 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<Base title={title} description={description}>
+  <article class="wrap page">
+    <h1>{title}</h1>
+    <div class="prose"><slot /></div>
+  </article>
+</Base>
+
+<style>
+  .page {
+    padding-top: clamp(24px, 4vw, 48px);
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 700;
+    font-stretch: 82%;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+  .prose :global(a) {
+    color: var(--amber);
+  }
+  .prose :global(table) {
+    border-collapse: collapse;
+    margin-top: 1em;
+    width: 100%;
+  }
+  .prose :global(th),
+  .prose :global(td) {
+    text-align: left;
+    padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--graphite);
+    vertical-align: top;
+  }
+  .prose :global(th) {
+    font-stretch: 78%;
+    color: var(--ash);
+    font-weight: 560;
+  }
+</style>

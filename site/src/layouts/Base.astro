@@ -1,0 +1,228 @@
+---
+import '../styles/global.css';
+import Consent from '../components/Consent.astro';
+import { SITE_DESCRIPTION, SITE_NAME, TEMAS } from '../config';
+import { updatedAt } from '../lib/data';
+import { hora } from '../lib/format';
+
+interface Props {
+  title?: string;
+  description?: string;
+  jsonLd?: object;
+}
+const { title, description = SITE_DESCRIPTION, jsonLd } = Astro.props;
+const fullTitle = title ? `${title} · ${SITE_NAME}` : `${SITE_NAME} · crises no mundo em tempo real`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const updated = updatedAt();
+const path = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#121110" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary" />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <a class="skip sr-only" href="#conteudo">Pular para o conteúdo</a>
+    <header class="masthead">
+      <div class="wrap bar">
+        <a href="/" class="mark" aria-label={`${SITE_NAME}, página inicial`}>
+          <svg viewBox="0 0 40 16" width="40" height="16" aria-hidden="true">
+            <path d="M0 8h9l2-6 3 12 3-10 2 7 2-5 2 2h17" />
+          </svg>
+          <span>{SITE_NAME}</span>
+        </a>
+        <p class="stamp label">
+          <span class="dot" aria-hidden="true"></span>
+          Atualizado às <time datetime={updated.toISOString()}>{hora(updated)}</time> · coleta a cada 30 min
+        </p>
+      </div>
+      <nav class="wrap nav" aria-label="Temas">
+        <a href="/" aria-current={path === '/' ? 'page' : undefined}>Mapa</a>
+        {
+          TEMAS.map((t) => (
+            <a href={`/tema/${t.slug}/`} aria-current={path.startsWith(`/tema/${t.slug}`) ? 'page' : undefined}>
+              {t.nome}
+            </a>
+          ))
+        }
+        <a href="/paises/" aria-current={path.startsWith('/pais') ? 'page' : undefined}>Países</a>
+        <a href="/metodologia/" aria-current={path.startsWith('/metodologia') ? 'page' : undefined}>Metodologia</a>
+      </nav>
+    </header>
+
+    <main id="conteudo">
+      <slot />
+    </main>
+
+    <footer class="foot">
+      <div class="wrap cols">
+        <div>
+          <p class="name">{SITE_NAME}</p>
+          <p class="small">
+            Monitor independente. Os dados vêm de fontes primárias, cada registro leva o link para a origem e nenhum
+            texto é escrito à mão.
+          </p>
+        </div>
+        <div>
+          <p class="label">Fontes</p>
+          <p class="small">
+            <a href="https://earthquake.usgs.gov/" rel="noopener">USGS</a> ·
+            <a href="https://www.gdacs.org/" rel="noopener">GDACS</a> ·
+            <a href="https://eonet.gsfc.nasa.gov/" rel="noopener">NASA EONET</a> ·
+            <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" rel="noopener">CISA KEV</a> ·
+            <a href="https://www.gdeltproject.org/" rel="noopener">GDELT</a>
+          </p>
+        </div>
+        <div>
+          <p class="label">Site</p>
+          <p class="small links">
+            <a href="/sobre/">Sobre</a>
+            <a href="/metodologia/">Metodologia</a>
+            <a href="/privacidade/">Privacidade</a>
+            <a href="/contato/">Contato</a>
+            <a href="/rss.xml">RSS</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+    <Consent />
+  </body>
+</html>
+
+<style>
+  .skip:focus {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    width: auto;
+    height: auto;
+    clip: auto;
+    background: var(--bone);
+    color: var(--soot);
+    padding: 8px 12px;
+    z-index: 20;
+  }
+  .masthead {
+    border-bottom: 1px solid var(--graphite-2);
+    background: var(--soot);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    flex-wrap: wrap;
+    padding-block: 14px 8px;
+  }
+  .mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-stretch: 88%;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+  }
+  .mark path {
+    fill: none;
+    stroke: var(--amber);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+  .stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    font-weight: 480;
+  }
+  .stamp time {
+    color: var(--bone);
+    font-weight: 600;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    50% {
+      opacity: 0.3;
+    }
+  }
+  .nav {
+    display: flex;
+    gap: 4px 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 10px;
+  }
+  .nav a {
+    flex: none;
+    font-size: 0.95rem;
+    font-stretch: 85%;
+    font-weight: 520;
+    color: var(--bone-dim);
+    text-decoration: none;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+  }
+  .nav a:hover {
+    color: var(--bone);
+  }
+  .nav a[aria-current='page'] {
+    color: var(--bone);
+    border-bottom-color: var(--amber);
+  }
+  .foot {
+    margin-top: clamp(56px, 8vw, 96px);
+    border-top: 1px solid var(--graphite-2);
+    background: var(--soot);
+    padding-block: 32px 48px;
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 24px 40px;
+  }
+  @media (max-width: 720px) {
+    .cols {
+      grid-template-columns: 1fr;
+    }
+  }
+  .name {
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .small {
+    font-size: 0.8rem;
+    color: var(--bone-dim);
+    margin-top: 6px;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+</style>

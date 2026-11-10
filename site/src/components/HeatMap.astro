@@ -1,0 +1,422 @@
+---
+// Mapa de calor + ranking "Onde está tremendo". SVG gerado no build; o script só troca tema/janela.
+import { TEMAS, type TemaId } from '../config';
+import { countries, featuredEvents, hasCountryPage, heat, hourly } from '../lib/data';
+import { num, pct } from '../lib/format';
+import { MAP_H, MAP_W, worldMap } from '../lib/map';
+
+interface Props {
+  tema?: TemaId; // página de tema: filtro fixo
+  rankingSize?: number;
+}
+const { tema, rankingSize = 10 } = Astro.props;
+const { shapes, graticule, project } = worldMap();
+const h24 = heat('24h');
+const h7 = heat('7d');
+const ORDER: TemaId[] = TEMAS.map((t) => t.id);
+
+// dados enxutos para o script: [total, ...por tema na ordem de TEMAS]
+const pack = (p?: { total: number; temas: Record<TemaId, number> }) => (p ? [p.total, ...ORDER.map((t) => p.temas[t] ?? 0)] : null);
+const isos = new Set([...Object.keys(h24.paises), ...Object.keys(h7.paises)]);
+const data: Record<string, { n: string; s: string | null; a: number[] | null; b: number[] | null; v: number | null }> = {};
+for (const iso of isos) {
+  const c = countries()[iso];
+  if (!c) continue;
+  data[iso] = {
+    n: c.nome,
+    s: hasCountryPage(iso) ? c.slug : null,
+    a: pack(h24.paises[iso]),
+    b: pack(h7.paises[iso]),
+    v: h24.paises[iso]?.variacao ?? null,
+  };
+}
+const col = tema ? ORDER.indexOf(tema) + 1 : 0;
+const value = (iso: string, w: 'a' | 'b' = 'a') => data[iso]?.[w]?.[col] ?? 0;
+const max24 = Math.max(1, ...Object.keys(data).map((i) => value(i)));
+const bin = (v: number, max: number) => (v <= 0 ? 0 : Math.min(5, 1 + Math.floor(Math.sqrt(v / max) * 5)));
+
+const ranking = Object.keys(data)
+  .filter((i) => value(i) > 0)
+  .sort((x, y) => value(y) - value(x));
+// mini-traço de 72h por país (soma dos temas ou só o tema da página)
+const trace = (iso: string) => {
+  const b = hourly()[iso];
+  if (!b) return [];
+  return tema ? b[tema] : b.conflito.map((_, i) => ORDER.reduce((acc, t) => acc + b[t][i], 0));
+};
+const top = ranking.slice(0, 30).map((iso) => ({ iso, values: trace(iso) }));
+
+// eventos oficiais das últimas 24h com coordenadas
+const since = Date.now() - 24 * 3600_000;
+const markers = featuredEvents()
+  .filter((e) => e.lat !== null && e.lon !== null && (!tema || e.tema === tema) && new Date(e.atualizado_em).getTime() >= since)
+  .map((e) => ({ e, xy: project(e.lon!, e.lat!) }))
+  .filter((m) => m.xy);
+const uid = `hm-${tema ?? 'all'}`;
+---
+
+<div class="heat" id={uid} data-col={col}>
+  {
+    !tema && (
+      <div class="controls" role="group" aria-label="Filtrar o mapa">
+        <div class="seg" data-control="col">
+          <button type="button" data-v="0" aria-pressed="true">
+            Tudo
+          </button>
+          {TEMAS.map((t, i) => (
+            <button type="button" data-v={i + 1} aria-pressed="false">
+              {t.curto}
+            </button>
+          ))}
+        </div>
+        <div class="seg" data-control="win">
+          <button type="button" data-v="a" aria-pressed="true">
+            24h
+          </button>
+          <button type="button" data-v="b" aria-pressed="false">
+            7 dias
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  <div class="grid">
+    <div class="mapbox">
+      <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} class="map" role="img" aria-labelledby={`${uid}-t`}>
+        <title id={`${uid}-t`}>Mapa de calor por país; o ranking ao lado traz os mesmos dados em texto</title>
+        <path d={graticule} class="graticule" />
+        {
+          shapes.map((s) => {
+            const has = !!data[s.iso3];
+            const b = bin(value(s.iso3), max24);
+            const body = <path d={s.d} data-iso={s.iso3} data-bin={b} class="land" />;
+            return has && data[s.iso3].s ? (
+              <a href={`/pais/${data[s.iso3].s}/`} aria-label={s.nome}>
+                {body}
+              </a>
+            ) : (
+              body
+            );
+          })
+        }
+        {
+          markers.map(({ e, xy }) => (
+            <circle cx={xy![0].toFixed(1)} cy={xy![1].toFixed(1)} r={1.5 + e.severidade * 1.5} class="quake">
+              <title>{e.titulo}</title>
+            </circle>
+          ))
+        }
+      </svg>
+      <div class="tip" hidden></div>
+      <div class="legend" aria-hidden="true">
+        <span class="label">menos</span>
+        {[1, 2, 3, 4, 5].map((b) => <i data-bin={b} />)}
+        <span class="label">mais registros</span>
+        {markers.length > 0 && (
+          <span class="label marker-key">
+            <svg width="12" height="12" viewBox="0 0 12 12">
+              <circle cx="6" cy="6" r="4.5" class="quake" />
+            </svg>
+            evento oficial (24h)
+          </span>
+        )}
+      </div>
+    </div>
+
+    <div class="ranking">
+      <h3 class="label">Onde está tremendo</h3>
+      <ol>
+        {
+          top.map(({ iso, values }, i) => {
+            const d = data[iso];
+            const mx = Math.max(1, ...values);
+            return (
+              <li data-iso={iso} hidden={i >= rankingSize}>
+                <span class="pos num">{i + 1}</span>
+                {d.s ? <a href={`/pais/${d.s}/`}>{d.n}</a> : <span>{d.n}</span>}
+                <svg class="mini" viewBox={`0 0 ${values.length * 3} 20`} preserveAspectRatio="none" aria-hidden="true">
+                  <path
+                    d={values
+                      .map((v, x) => {
+                        const a = v <= 0 ? 0.4 : Math.max(1, Math.sqrt(v / mx) * 9);
+                        return `M${x * 3 + 1.5} ${(10 - a).toFixed(1)}V${(10 + a).toFixed(1)}`;
+                      })
+                      .join('')}
+                  />
+                </svg>
+                <span class="val num">{num(value(iso))}</span>
+                <span class={`var num ${(d.v ?? 0) > 0 ? 'up' : ''}`}>{tema ? '' : pct(d.v)}</span>
+              </li>
+            );
+          })
+        }
+      </ol>
+      <p class="label foot">72h de traço · registros = notícias + eventos oficiais ponderados</p>
+    </div>
+  </div>
+  <script type="application/json" data-heat set:html={JSON.stringify(data)} />
+</div>
+
+<script>
+  type Row = { n: string; s: string | null; a: number[] | null; b: number[] | null; v: number | null };
+  for (const root of document.querySelectorAll<HTMLElement>('.heat')) {
+    const data = JSON.parse(root.querySelector('[data-heat]')!.textContent!) as Record<string, Row>;
+    let col = Number(root.dataset.col ?? 0);
+    let win: 'a' | 'b' = 'a';
+    const lands = [...root.querySelectorAll<SVGPathElement>('path.land')];
+    const rows = [...root.querySelectorAll<HTMLLIElement>('.ranking li')];
+    const val = (iso: string) => data[iso]?.[win]?.[col] ?? 0;
+    const fmt = (n: number) => n.toLocaleString('pt-BR');
+
+    function render() {
+      const max = Math.max(1, ...Object.keys(data).map(val));
+      // variação só existe para o total das últimas 24h
+      root.classList.toggle('novar', col !== 0 || win !== 'a');
+      for (const p of lands) {
+        const v = val(p.dataset.iso!);
+        p.dataset.bin = String(v <= 0 ? 0 : Math.min(5, 1 + Math.floor(Math.sqrt(v / max) * 5)));
+      }
+      const sorted = rows.filter((r) => val(r.dataset.iso!) > 0).sort((x, y) => val(y.dataset.iso!) - val(x.dataset.iso!));
+      const ol = root.querySelector('.ranking ol')!;
+      rows.forEach((r) => (r.hidden = true));
+      sorted.slice(0, 10).forEach((r, i) => {
+        r.hidden = false;
+        r.querySelector('.pos')!.textContent = String(i + 1);
+        r.querySelector('.val')!.textContent = fmt(val(r.dataset.iso!));
+        ol.appendChild(r);
+      });
+    }
+
+    for (const seg of root.querySelectorAll<HTMLElement>('.seg')) {
+      seg.addEventListener('click', (ev) => {
+        const btn = (ev.target as HTMLElement).closest('button');
+        if (!btn) return;
+        seg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        if (seg.dataset.control === 'col') col = Number(btn.dataset.v);
+        else win = btn.dataset.v as 'a' | 'b';
+        render();
+      });
+    }
+
+    // dica ao passar o mouse / tocar
+    const tip = root.querySelector<HTMLElement>('.tip')!;
+    const box = root.querySelector<HTMLElement>('.mapbox')!;
+    box.addEventListener('pointermove', (ev) => {
+      const iso = (ev.target as SVGElement).dataset?.iso;
+      if (!iso) return void (tip.hidden = true);
+      const r = box.getBoundingClientRect();
+      const name = data[iso]?.n ?? (ev.target as SVGElement).closest('a')?.getAttribute('aria-label') ?? '';
+      tip.textContent = `${name} · ${fmt(val(iso))} registros`;
+      tip.style.left = `${Math.min(ev.clientX - r.left + 12, r.width - 180)}px`;
+      tip.style.top = `${ev.clientY - r.top + 12}px`;
+      tip.hidden = false;
+    });
+    box.addEventListener('pointerleave', () => (tip.hidden = true));
+  }
+</script>
+
+<style>
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-bottom: 14px;
+  }
+  .seg {
+    display: inline-flex;
+    border: 1px solid var(--graphite-2);
+  }
+  .seg button {
+    font: inherit;
+    font-stretch: 78%;
+    font-weight: 560;
+    font-size: 0.85rem;
+    color: var(--bone-dim);
+    background: transparent;
+    border: 0;
+    border-right: 1px solid var(--graphite-2);
+    padding: 7px 12px;
+    min-height: 36px;
+    cursor: pointer;
+    transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out);
+  }
+  .seg button:last-child {
+    border-right: 0;
+  }
+  .seg button:hover {
+    color: var(--bone);
+  }
+  .seg button[aria-pressed='true'] {
+    background: var(--bone);
+    color: var(--soot);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2.1fr) minmax(260px, 1fr);
+    gap: clamp(16px, 3vw, 40px);
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .mapbox {
+    position: relative;
+  }
+  .map {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .graticule {
+    fill: none;
+    stroke: var(--graphite);
+    stroke-width: 0.6;
+  }
+  .land {
+    stroke: var(--soot);
+    stroke-width: 0.5;
+    transition: fill 0.5s var(--ease-out);
+  }
+  .land[data-bin='0'],
+  .legend i[data-bin='0'] {
+    fill: var(--heat-0);
+    background: var(--heat-0);
+  }
+  .land[data-bin='1'],
+  .legend i[data-bin='1'] {
+    fill: var(--heat-1);
+    background: var(--heat-1);
+  }
+  .land[data-bin='2'],
+  .legend i[data-bin='2'] {
+    fill: var(--heat-2);
+    background: var(--heat-2);
+  }
+  .land[data-bin='3'],
+  .legend i[data-bin='3'] {
+    fill: var(--heat-3);
+    background: var(--heat-3);
+  }
+  .land[data-bin='4'],
+  .legend i[data-bin='4'] {
+    fill: var(--heat-4);
+    background: var(--heat-4);
+  }
+  .land[data-bin='5'],
+  .legend i[data-bin='5'] {
+    fill: var(--heat-5);
+    background: var(--heat-5);
+  }
+  a:hover .land,
+  a:focus-visible .land {
+    stroke: var(--bone);
+    stroke-width: 1.2;
+  }
+  .quake {
+    fill: none;
+    stroke: var(--bone);
+    stroke-width: 1;
+    opacity: 0.85;
+  }
+  .tip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--bone);
+    color: var(--soot);
+    font-size: 0.8rem;
+    font-weight: 560;
+    padding: 4px 8px;
+    white-space: nowrap;
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.5);
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin-top: 10px;
+  }
+  .legend i {
+    width: 22px;
+    height: 10px;
+  }
+  .legend .label {
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0 4px;
+  }
+  .marker-key {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 12px !important;
+  }
+  .ranking h3 {
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--graphite-2);
+  }
+  .ranking ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .ranking li {
+    display: grid;
+    grid-template-columns: 1.6em minmax(0, 1fr) 64px 4.2em 4.4em;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--graphite);
+    font-size: 0.95rem;
+  }
+  .ranking li[hidden] {
+    display: none;
+  }
+  .ranking li a,
+  .ranking li > span:nth-child(2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .ranking li a:hover {
+    color: var(--amber);
+  }
+  .pos {
+    color: var(--ash);
+    font-size: 0.8rem;
+  }
+  .mini {
+    width: 64px;
+    height: 20px;
+  }
+  .mini path {
+    stroke: var(--bone-dim);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .val {
+    text-align: right;
+    font-weight: 600;
+  }
+  .var {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--ash);
+  }
+  .var.up {
+    color: var(--amber);
+  }
+  .novar .var {
+    visibility: hidden;
+  }
+  .foot {
+    margin-top: 10px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 450;
+  }
+</style>

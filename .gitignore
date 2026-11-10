@@ -8,3 +8,5 @@ site/.astro/
 /data/
 .env
 .DS_Store
+.impeccable/sketches/
+.impeccable/questions/

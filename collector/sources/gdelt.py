@@ -43,10 +43,10 @@ def latest_slot():
     return datetime.strptime(m.group(1), "%Y%m%d%H%M%S").replace(tzinfo=UTC)
 
 
-def slots_to_fetch(last_done, latest):
+def slots_to_fetch(last_done, latest, max_slots=MAX_SLOTS):
     """Slots de 15 min ainda não processados, do mais antigo ao mais novo."""
     start = last_done + SLOT if last_done else latest - SLOT * 3
-    start = max(start, latest - SLOT * (MAX_SLOTS - 1))
+    start = max(start, latest - SLOT * (max_slots - 1))
     out = []
     while start <= latest:
         out.append(start)
@@ -116,16 +116,20 @@ def _download(url):
         return z.read(z.namelist()[0]).decode("utf-8", errors="replace")
 
 
-def fetch(last_done=None, log=print):
-    """Devolve (eventos, último slot processado)."""
+def fetch(last_done=None, log=print, backfill_hours=None):
+    """Devolve (eventos, último slot processado). backfill_hours reprocessa as últimas N horas."""
     latest = latest_slot()
+    max_slots = MAX_SLOTS
+    if backfill_hours:
+        max_slots = backfill_hours * 4
+        last_done = latest - SLOT * max_slots
     events, done = [], last_done
-    for slot in slots_to_fetch(last_done, latest):
+    for slot in slots_to_fetch(last_done, latest, max_slots):
         for suffix, lang in FEEDS:
             url = f"{BASE}{_ts(slot)}{suffix}.gkg.csv.zip"
             try:
                 events += parse_gkg(_download(url), lang or "en")
             except Exception as e:  # feed traduzido às vezes não sai; não pode derrubar a coleta
-                log(f"  gdelt: falhou {url}: {e}")
+                log(f"  gdelt: falhou {url.rsplit('/', 1)[-1]}: {type(e).__name__}")
         done = slot
     return events, done

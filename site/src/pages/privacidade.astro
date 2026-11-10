@@ -1,0 +1,24 @@
+---
+import Page from '../layouts/Page.astro';
+import { CONTACT_EMAIL, SITE_NAME } from '../config';
+---
+
+<Page title="Política de privacidade" description={`Como o ${SITE_NAME} trata dados e cookies, conforme a LGPD.`}>
+  <p>
+    O {SITE_NAME} não tem cadastro, login ou formulários e não coleta dados pessoais diretamente. Esta política explica os cookies
+    usados por terceiros, conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018).
+  </p>
+  <h2>Publicidade</h2>
+  <p>
+    O site exibe anúncios de parceiros como o Google AdSense. Com o seu consentimento, esses parceiros usam cookies para mostrar
+    anúncios com base nas suas visitas a este e a outros sites. Se você recusar, os anúncios continuam aparecendo, mas não são
+    personalizados. Para mudar sua escolha, apague os dados deste site no navegador. Para saber mais ou desativar a personalização,
+    acesse <a href="https://policies.google.com/technologies/ads?hl=pt-BR">as políticas de publicidade do Google</a>.
+  </p>
+  <h2>Armazenamento local</h2>
+  <p>Guardamos no seu navegador só a sua escolha sobre cookies de publicidade. Nada disso é enviado para nós.</p>
+  <h2>Links externos</h2>
+  <p>Os registros apontam para sites de terceiros, que têm suas próprias políticas de privacidade.</p>
+  <h2>Contato</h2>
+  <p>Pedidos sobre privacidade: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+</Page>

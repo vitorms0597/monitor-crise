@@ -1,0 +1,56 @@
+---
+// Espaço de anúncio com altura reservada (evita o layout pular quando o anúncio carrega).
+import { AADS_UNIT, ADSENSE_CLIENT } from '../config';
+
+interface Props {
+  slot?: string; // id do bloco no AdSense
+  format?: 'faixa' | 'retangulo';
+}
+const { slot = '', format = 'faixa' } = Astro.props;
+---
+
+<aside class:list={['ad', format]} aria-label="Publicidade">
+  <span class="label">Publicidade</span>
+  {
+    ADSENSE_CLIENT && slot ? (
+      <ins
+        class="adsbygoogle"
+        style="display:block"
+        data-ad-client={ADSENSE_CLIENT}
+        data-ad-slot={slot}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    ) : AADS_UNIT ? (
+      <iframe
+        data-aa={AADS_UNIT}
+        src={`//ad.a-ads.com/${AADS_UNIT}?size=Adaptive`}
+        style="border:0;padding:0;width:100%;height:100%;overflow:hidden"
+        title="Publicidade"
+        loading="lazy"></iframe>
+    ) : (
+      <div class="placeholder" />
+    )
+  }
+</aside>
+
+<style>
+  .ad {
+    margin-block: clamp(32px, 5vw, 56px) 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ad .label {
+    font-size: 0.65rem;
+  }
+  .faixa > :last-child {
+    min-height: 100px;
+  }
+  .retangulo > :last-child {
+    min-height: 250px;
+  }
+  .placeholder {
+    border: 1px dashed var(--graphite-2);
+  }
+</style>

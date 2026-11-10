@@ -1,0 +1,72 @@
+name: Coleta e deploy
+
+on:
+  schedule:
+    - cron: "*/30 * * * *" # o GitHub pode atrasar alguns minutos em horário de pico
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      backfill_horas:
+        description: "Reprocessar as últimas N horas do GDELT (vazio = normal)"
+        required: false
+
+concurrency:
+  group: coleta
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  coleta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      SITE_URL: ${{ vars.SITE_URL || 'https://monitordecrises.com.br' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Recupera os dados da última coleta (branch data)
+        run: |
+          mkdir -p data
+          if git fetch --depth=1 origin data 2>/dev/null; then
+            git archive FETCH_HEAD | tar -x -C data
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "httpx>=0.27"
+
+      - name: Coleta
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.backfill_horas }}" ]; then ARGS="--backfill-horas ${{ inputs.backfill_horas }}"; fi
+          python -m collector --data-dir data $ARGS
+
+      - name: Salva os dados (branch data, sempre um único commit)
+        run: |
+          cd data
+          git init -q -b data
+          git add -A
+          git -c user.name="monitor-bot" -c user.email="bot@users.noreply.github.com" commit -qm "dados $(date -u +%FT%TZ)"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" data
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Build do site
+        working-directory: site
+        run: |
+          npm ci
+          npx astro build
+
+      - name: Publica no Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy site/dist --project-name=monitor-crises --branch=main --commit-dirty=true

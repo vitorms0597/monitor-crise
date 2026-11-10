@@ -1,0 +1,229 @@
+---
+// Traço de sismógrafo: cada hora é um risco espelhado em torno da linha de base;
+// a amplitude é o volume real daquela hora (notícias + eventos oficiais ponderados).
+import { hora } from '../lib/format';
+
+type Band = { label: string; href?: string; values: number[]; total: number };
+interface Props {
+  bands: Band[];
+  axis: Date[];
+  caption: string;
+  compact?: boolean;
+}
+const { bands, axis, caption, compact = false } = Astro.props;
+
+const STEP = compact ? 5 : 9;
+const BAND_H = compact ? 34 : 64;
+const W = axis.length * STEP;
+const max = Math.max(1, ...bands.flatMap((b) => b.values));
+// raiz quadrada: horas calmas ainda aparecem sem que o pico esconda o resto
+const amp = (v: number) => (v <= 0 ? 0.6 : Math.max(1.2, Math.sqrt(v / max) * (BAND_H / 2 - 3)));
+const fmtDay = (d: Date) =>
+  d.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', weekday: 'short', day: '2-digit' }).replace('.', '');
+const ticks = axis
+  .map((d, i) => ({ d, i, h: Number(hora(d).slice(0, 2)) }))
+  .filter((t) => t.h % 6 === 0);
+const last = axis.at(-1);
+---
+
+<figure class:list={['seismo', { compact }]}>
+  <div class="rows">
+    {
+      bands.map((b, bi) => (
+        <div class="row">
+          <div class="side">
+            {b.href ? (
+              <a href={b.href} class="name">
+                {b.label}
+              </a>
+            ) : (
+              <span class="name">{b.label}</span>
+            )}
+            <span class="total num">{b.total.toLocaleString('pt-BR')}</span>
+          </div>
+          <svg
+            class="trace"
+            viewBox={`0 0 ${W} ${BAND_H}`}
+            preserveAspectRatio="none"
+            role="img"
+            aria-label={`${b.label}: ${b.total.toLocaleString('pt-BR')} registros no período; pico de ${Math.max(...b.values).toLocaleString('pt-BR')} em uma hora`}
+            style={`--delay:${bi * 120}ms`}
+          >
+            {ticks.map((t) => (
+              <line class={t.h === 0 ? 'grid day' : 'grid'} x1={t.i * STEP + STEP / 2} x2={t.i * STEP + STEP / 2} y1="0" y2={BAND_H} />
+            ))}
+            <line class="base" x1="0" x2={W} y1={BAND_H / 2} y2={BAND_H / 2} />
+            <path
+              class="ink"
+              d={b.values
+                .map((v, i) => {
+                  const x = i * STEP + STEP / 2;
+                  const a = amp(v);
+                  return `M${x} ${(BAND_H / 2 - a).toFixed(1)}V${(BAND_H / 2 + a).toFixed(1)}`;
+                })
+                .join('')}
+            />
+            <line class="needle" x1={W - 1} x2={W - 1} y1="0" y2={BAND_H} />
+          </svg>
+        </div>
+      ))
+    }
+  </div>
+  <div class="axis" aria-hidden="true">
+    <div class="side" />
+    <div class="ticks">
+      {
+        ticks.map((t) => (
+          <span style={`left:${((t.i + 0.5) / axis.length) * 100}%`} class={t.h === 0 ? 'day' : ''}>
+            {t.h === 0 ? fmtDay(t.d) : `${t.h}h`}
+          </span>
+        ))
+      }
+      {last && <span class="now amber">agora · {hora(last)}</span>}
+    </div>
+  </div>
+  <figcaption class="label">{caption}</figcaption>
+</figure>
+
+<style>
+  .seismo {
+    margin: 0;
+    --side: clamp(92px, 16vw, 168px);
+  }
+  .compact {
+    --side: 0px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: var(--side) 1fr;
+    align-items: center;
+    border-top: 1px solid var(--graphite);
+  }
+  .row:last-child {
+    border-bottom: 1px solid var(--graphite);
+  }
+  .compact .row,
+  .compact .row:last-child {
+    border: 0;
+  }
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-right: 12px;
+  }
+  .compact .side {
+    display: none;
+  }
+  .name {
+    font-stretch: 78%;
+    font-weight: 620;
+    font-size: clamp(0.85rem, 1.4vw, 1rem);
+    text-decoration: none;
+  }
+  a.name:hover {
+    color: var(--amber);
+  }
+  .total {
+    color: var(--ash);
+    font-size: 0.8rem;
+  }
+  .trace {
+    display: block;
+    width: 100%;
+    height: clamp(44px, 7vw, 64px);
+    overflow: visible;
+    /* o tambor grava da esquerda para a direita uma única vez */
+    animation: record 1.8s var(--ease-out) both;
+    animation-delay: var(--delay);
+  }
+  .compact .trace {
+    height: 28px;
+    animation: none;
+  }
+  .grid {
+    stroke: var(--graphite);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .grid.day {
+    stroke: var(--graphite-2);
+  }
+  .base {
+    stroke: var(--graphite-2);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .ink {
+    stroke: var(--bone);
+    stroke-width: 2;
+    stroke-linecap: butt;
+    vector-effect: non-scaling-stroke;
+  }
+  .compact .ink {
+    stroke-width: 1.5;
+    stroke: var(--bone-dim);
+  }
+  .needle {
+    stroke: var(--amber);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+  .compact .needle {
+    display: none;
+  }
+  @keyframes record {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  .axis {
+    display: grid;
+    grid-template-columns: var(--side) 1fr;
+    height: 22px;
+  }
+  .compact .axis {
+    display: none;
+  }
+  .ticks {
+    position: relative;
+  }
+  .ticks span {
+    position: absolute;
+    top: 4px;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: var(--ash);
+    font-stretch: 75%;
+    white-space: nowrap;
+  }
+  .ticks span.day {
+    color: var(--bone-dim);
+  }
+  .ticks .now {
+    right: 0;
+    left: auto !important;
+    transform: none;
+    font-weight: 600;
+    background: var(--soot);
+    padding-left: 6px;
+  }
+  @media (max-width: 640px) {
+    .ticks span:not(.day):not(.now) {
+      display: none;
+    }
+  }
+  figcaption {
+    margin-top: 10px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-stretch: 85%;
+    font-weight: 450;
+  }
+  .compact figcaption {
+    display: none;
+  }
+</style>

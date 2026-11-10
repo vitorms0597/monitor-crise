@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+import { countryPages, heat } from '../lib/data';
+import { num } from '../lib/format';
+
+const h7 = heat('7d');
+const byContinent = new Map<string, ReturnType<typeof countryPages>>();
+for (const c of [...countryPages()].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))) {
+  const list = byContinent.get(c.continente) ?? [];
+  list.push(c);
+  byContinent.set(c.continente, list);
+}
+const CONT: Record<string, string> = {
+  Africa: 'África',
+  Asia: 'Ásia',
+  Europe: 'Europa',
+  'North America': 'América do Norte e Central',
+  'South America': 'América do Sul',
+  Oceania: 'Oceania',
+  'Seven seas (open ocean)': 'Oceanos',
+};
+---
+
+<Base title="Países monitorados" description="Lista de países com registros de guerras, ciberataques, apagões e desastres nos últimos 7 dias.">
+  <section class="wrap intro">
+    <h1>Países</h1>
+    <p class="lede">Países com registros nos últimos 7 dias. O número ao lado é o total do período.</p>
+  </section>
+  <div class="wrap cols">
+    {
+      [...byContinent.entries()].map(([cont, list]) => (
+        <section>
+          <h2 class="label">{CONT[cont] ?? cont}</h2>
+          <ul>
+            {list.map((c) => (
+              <li>
+                <a href={`/pais/${c.slug}/`}>{c.nome}</a>
+                <span class="num">{num(h7.paises[c.iso3]?.total ?? 0)}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .intro {
+    padding-block: clamp(24px, 4vw, 48px) 24px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 700;
+    font-stretch: 82%;
+  }
+  .lede {
+    margin-top: 10px;
+    color: var(--bone-dim);
+  }
+  .cols {
+    columns: 3 260px;
+    column-gap: 40px;
+  }
+  section {
+    break-inside: avoid;
+    margin-bottom: 28px;
+  }
+  h2 {
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--graphite-2);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--graphite);
+  }
+  li a {
+    text-decoration: none;
+  }
+  li a:hover {
+    color: var(--amber);
+  }
+  li .num {
+    color: var(--ash);
+  }
+</style>

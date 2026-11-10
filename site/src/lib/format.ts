@@ -1,0 +1,24 @@
+const TZ = 'America/Sao_Paulo';
+
+export const num = (n: number) => n.toLocaleString('pt-BR');
+
+export const pct = (v: number | null) => (v === null ? 'novo' : `${v > 0 ? '+' : ''}${num(v)}%`);
+
+export const hora = (d: Date | string) =>
+  new Date(d).toLocaleTimeString('pt-BR', { timeZone: TZ, hour: '2-digit', minute: '2-digit' });
+
+export const dataHora = (d: Date | string) =>
+  new Date(d).toLocaleString('pt-BR', { timeZone: TZ, day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(',', ' ·');
+
+export const dataLonga = (d: Date | string) =>
+  new Date(d).toLocaleDateString('pt-BR', { timeZone: TZ, day: 'numeric', month: 'long', year: 'numeric' });
+
+export function relativo(d: Date | string, now: Date) {
+  const min = Math.round((now.getTime() - new Date(d).getTime()) / 60000);
+  if (min < 60) return `há ${Math.max(1, min)} min`;
+  const h = Math.round(min / 60);
+  if (h < 48) return `há ${h} h`;
+  return `há ${Math.round(h / 24)} dias`;
+}
+
+export const IDIOMAS: Record<string, string> = { en: 'EN', es: 'ES', pt: 'PT', fr: 'FR', de: 'DE', it: 'IT' };

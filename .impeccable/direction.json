@@ -1,0 +1,75 @@
+{
+  "title": "Escolha o mundo visual do Monitor de Crises",
+  "question": "O sorteio escolheu o Sismograma de tambor. Fique com ele, pegue uma alternativa ou sorteie de novo.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Sismograma de tambor",
+      "kicker": "O SORTEIO",
+      "lineage": "sismógrafos de tambor com papel enfumaçado (observatórios, séc. XX)",
+      "thesis": "O mundo como sismograma: cada tema é um traço riscado na fuligem, e a amplitude do traço é o calor da crise. Recusa o painel neon de 'sala de guerra' e o portal de notícias branco.",
+      "palette": ["#121110", "#EDE6D6", "#3A3733", "#E8A33D", "#7FB7C9"],
+      "materials": ["papel enfumaçado (fuligem)", "traço riscado em branco-osso", "grade milimetrada grafite", "lápis de anotação âmbar"],
+      "viewport": "No topo, a faixa do sismograma com 4 traços (ciber, conflito, energia, desastre) nos últimos 14 dias e a agulha no 'agora'. Logo abaixo, o mapa-múndi em fuligem, com os países 'queimando' de âmbar a branco conforme o calor, e ao lado a lista 'Onde está tremendo' com um mini-traço por país. No celular: faixa, mapa e lista empilhados.",
+      "risk": "Se o traço ficar decorativo em vez de ser o dado real, vira um enfeite 'retrô'. Cada linha precisa ser a série de verdade.",
+      "board": "",
+      "hero": ""
+    },
+    {
+      "id": "challenger-metro",
+      "label": "Tiles ao vivo (Metro)",
+      "lineage": "interface Metro/Windows Phone",
+      "thesis": "Cada tema e cada país vira um tile de cor chapada que gira quando chega um número novo.",
+      "case": "Funde bem: tiles ao vivo mostram atualização a cada 30 min. Mas o mapa perde o protagonismo.",
+      "hero": "https://impeccable.style/worlds/cards/digital-design-canon-metro-typographic-tiles-hero.webp"
+    },
+    {
+      "id": "challenger-darkroom",
+      "label": "Ficha de exposição (laboratório fotográfico)",
+      "lineage": "fichas de ampliação de laboratório preto e branco",
+      "thesis": "O calor vira densidade de hachura sobre uma escala de 11 tons, e dois temas cruzados formam hachura cruzada.",
+      "case": "Funde bem: a cor deixa de ser o único canal e o mapa fica acessível. Por outro lado, é mais abstrato para um público amplo.",
+      "hero": "https://impeccable.style/worlds/cards/operate-b-exposure-record-zone-sheets-hero.webp"
+    },
+    {
+      "id": "challenger-timetable",
+      "label": "Quadro de horários",
+      "lineage": "guias de horário de companhias aéreas dos anos 70",
+      "thesis": "Cada país é uma linha de horário, com tudo num tamanho só de letra e a hierarquia feita por peso e inversão.",
+      "case": "Funde razoável: a lista por país fica ótima, mas a navegação lateral atrapalha no celular.",
+      "hero": "https://impeccable.style/worlds/cards/rw-timetable-slide-rack-hero.webp"
+    },
+    {
+      "id": "challenger-streaming",
+      "label": "Parede de streaming",
+      "lineage": "catálogos de streaming",
+      "thesis": "Cada país é uma fileira de cards de notícia que crescem quando ganham foco.",
+      "case": "Funde, mas fica genérico e não temos imagens das notícias para alimentar os cards.",
+      "hero": "https://impeccable.style/worlds/cards/pop-culture-shelf-streaming-title-card-wall-hero.webp"
+    },
+    {
+      "id": "challenger-manual",
+      "label": "Manual com abas de acetato",
+      "lineage": "manuais de software em caixa",
+      "thesis": "Cada tema vira uma aba colorida, com o conteúdo em folhas de acetato.",
+      "case": "Funde mal: é um formato de leitura longa e o visitante quer uma checagem rápida no celular.",
+      "hero": "https://impeccable.style/worlds/cards/rw-manual-acetate-tab-board-hero.webp"
+    },
+    {
+      "id": "challenger-zoo",
+      "label": "Mapa de zoológico",
+      "lineage": "mapas-guia ilustrados de parques",
+      "thesis": "Áreas como lóbulos de cor chapada e alegre.",
+      "case": "Funde mal: o tom lúdico contradiz o 'frio e factual' diante de guerras e desastres.",
+      "hero": "https://impeccable.style/worlds/cards/aww2-zoo-gardens-guide-map-hero.webp"
+    }
+  ],
+  "reroll": true,
+  "canon": true,
+  "canonCard": {
+    "label": "O padrão da categoria",
+    "thesis": "Painel escuro de monitoramento com mapa-múndi em destaque, cards de estatística e feed de notícias, como LiveUAMap e GDACS, só que bem executado.",
+    "viewport": "Mapa grande no topo, cards com números de cada tema e feed de eventos embaixo."
+  },
+  "steer": true
+}
