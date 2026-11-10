@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import Feed from '../../components/Feed.astro';
-import { SUBTEMAS, temaById } from '../../config';
+import { SUBTEMAS, temaById, u } from '../../config';
 import { countries, countryName, eventSlug, featuredEvents, feed, hasCountryPage } from '../../lib/data';
 import { coords, dataHora, dataLonga } from '../../lib/format';
 import { MAP_H, MAP_W, worldMap } from '../../lib/map';
@@ -35,7 +35,7 @@ const jsonLd = {
 <Base title={e.titulo} description={eventDescription(e)} jsonLd={jsonLd}>
   <article class="wrap intro">
     <p class="label">
-      <a href={`/tema/${tema.slug}/`}>{tema.nome}</a> / {SUBTEMAS[e.subtema] ?? e.subtema}
+      <a href={u(`/tema/${tema.slug}/`)}>{tema.nome}</a> / {SUBTEMAS[e.subtema] ?? e.subtema}
     </p>
     <h1>{e.titulo}</h1>
     <dl class="facts">
@@ -44,13 +44,13 @@ const jsonLd = {
       <div><dt class="label">atualizado</dt><dd class="num">{dataHora(e.atualizado_em)}</dd></div>
       <div>
         <dt class="label">local</dt>
-        <dd>{country && hasCountryPage(country.iso3) ? <a href={`/pais/${country.slug}/`}>{country.nome}</a> : place}</dd>
+        <dd>{country && hasCountryPage(country.iso3) ? <a href={u(`/pais/${country.slug}/`)}>{country.nome}</a> : place}</dd>
       </div>
     </dl>
     <div class="prose">
       <p>
         Evento registrado pela fonte oficial <strong>{e.fonte}</strong> em {dataLonga(e.publicado_em)}. O nível {e.severidade} de 5 segue a
-        escala do Monitor de Crises, explicada na <a href="/metodologia/">metodologia</a>.
+        escala do Monitor de Crises, explicada na <a href={u('/metodologia/')}>metodologia</a>.
       </p>
       {e.lat !== null && <p class="num coords">Coordenadas: {coords(e.lat, e.lon!)}</p>}
       <p><a class="src" href={e.fonte_url} target="_blank" rel="noopener">Ver o registro original em {e.fonte} ↗</a></p>

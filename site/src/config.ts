@@ -1,12 +1,18 @@
+/** Caminho interno com o prefixo do site (ex.: /monitor-crises no GitHub Pages; vazio em domínio próprio). */
+export const u = (path: string) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}${path}`;
+
 export const SITE_NAME = 'Monitor de Crises';
-export const SITE_URL = import.meta.env.SITE_URL ?? 'https://monitordecrises.com.br';
+export const SITE_URL = new URL(import.meta.env.BASE_URL, import.meta.env.SITE).toString();
 export const SITE_DESCRIPTION =
   'Ciberataques, guerras, apagões e desastres no mundo, atualizados a cada 30 minutos a partir de fontes primárias, com mapa de calor por país.';
 
 // Anúncios: deixe vazio até a conta ser aprovada; os espaços continuam reservados no layout.
 export const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT ?? '';
 export const AADS_UNIT = import.meta.env.PUBLIC_AADS_UNIT ?? '';
-export const CONTACT_EMAIL = import.meta.env.PUBLIC_CONTACT_EMAIL ?? 'contato@monitordecrises.com.br';
+export const CONTACT_EMAIL: string = import.meta.env.PUBLIC_CONTACT_EMAIL ?? '';
+// sem e-mail configurado, o contato é por issues do repositório público
+export const CONTACT_URL = CONTACT_EMAIL ? `mailto:${CONTACT_EMAIL}` : 'https://github.com/vitorms0597/monitor-crises/issues';
+export const CONTACT_LABEL = CONTACT_EMAIL || 'issues do projeto no GitHub';
 
 export type TemaId = 'ciber' | 'conflito' | 'energia' | 'desastre';
 

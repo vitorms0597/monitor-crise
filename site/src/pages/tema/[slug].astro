@@ -4,7 +4,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import Feed from '../../components/Feed.astro';
 import HeatMap from '../../components/HeatMap.astro';
 import Seismogram from '../../components/Seismogram.astro';
-import { TEMAS } from '../../config';
+import { TEMAS, u } from '../../config';
 import { feed, hourAxis, hourlyWorld } from '../../lib/data';
 import { temaSummary } from '../../lib/texts';
 
@@ -20,7 +20,7 @@ const items = feed({ tema: tema.id, limit: 50 });
 
 <Base title={`${tema.nome} no mundo agora`} description={`${tema.nome}: ${summary.join(' ')}`}>
   <section class="wrap intro">
-    <p class="label"><a href="/">Mapa</a> / Tema</p>
+    <p class="label"><a href={u('/')}>Mapa</a> / Tema</p>
     <h1>{tema.nome} no mundo agora</h1>
     <div class="lede">{summary.map((s) => <p>{s}</p>)}</div>
   </section>

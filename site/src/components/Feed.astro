@@ -1,5 +1,5 @@
 ---
-import { SUBTEMAS, temaById } from '../config';
+import { SUBTEMAS, temaById, u } from '../config';
 import { countryName, eventSlug, featuredEvents, type Item } from '../lib/data';
 import { IDIOMAS, dataHora } from '../lib/format';
 
@@ -33,7 +33,7 @@ const featured = new Set(featuredEvents().map((e) => e.id));
               )}
             </div>
             {featured.has(e.id) ? (
-              <a class="title" href={`/evento/${eventSlug(e.id)}/`}>
+              <a class="title" href={u(`/evento/${eventSlug(e.id)}/`)}>
                 {e.titulo}
               </a>
             ) : (

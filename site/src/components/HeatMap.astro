@@ -1,6 +1,6 @@
 ---
 // Mapa de calor + ranking "Onde está tremendo". SVG gerado no build; o script só troca tema/janela.
-import { TEMAS, type TemaId } from '../config';
+import { TEMAS, type TemaId, u } from '../config';
 import { countries, featuredEvents, hasCountryPage, heat, hourly, longWindowLabel } from '../lib/data';
 import { num, pct } from '../lib/format';
 import { MAP_H, MAP_W, worldMap } from '../lib/map';
@@ -92,7 +92,7 @@ const uid = `hm-${tema ?? 'all'}`;
             const b = bin(value(s.iso3), max24);
             const body = <path d={s.d} data-iso={s.iso3} data-bin={b} class="land" />;
             return has && data[s.iso3].s ? (
-              <a href={`/pais/${data[s.iso3].s}/`} aria-label={s.nome}>
+              <a href={u(`/pais/${data[s.iso3].s}/`)} aria-label={s.nome}>
                 {body}
               </a>
             ) : (
@@ -134,7 +134,7 @@ const uid = `hm-${tema ?? 'all'}`;
             return (
               <li data-iso={iso} hidden={i >= rankingSize}>
                 <span class="pos num">{i + 1}</span>
-                {d.s ? <a href={`/pais/${d.s}/`}>{d.n}</a> : <span>{d.n}</span>}
+                {d.s ? <a href={u(`/pais/${d.s}/`)}>{d.n}</a> : <span>{d.n}</span>}
                 <svg class="mini" viewBox={`0 0 ${values.length * 3} 20`} preserveAspectRatio="none" aria-hidden="true">
                   <path
                     d={values

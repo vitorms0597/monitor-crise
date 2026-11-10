@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import Consent from '../components/Consent.astro';
-import { SITE_DESCRIPTION, SITE_NAME, TEMAS } from '../config';
+import { SITE_DESCRIPTION, SITE_NAME, TEMAS, u } from '../config';
 import { updatedAt } from '../lib/data';
 import { hora } from '../lib/format';
 
@@ -14,7 +14,8 @@ const { title, description = SITE_DESCRIPTION, jsonLd } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE_NAME}` : `${SITE_NAME} · crises no mundo em tempo real`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const updated = updatedAt();
-const path = Astro.url.pathname;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = Astro.url.pathname.slice(base.length) || '/';
 ---
 
 <!doctype html>
@@ -25,9 +26,9 @@ const path = Astro.url.pathname;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href="/rss.xml" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" type="image/svg+xml" href={u('/favicon.svg')} />
+    <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href={u('/rss.xml')} />
+    <link rel="sitemap" href={u('/sitemap-index.xml')} />
     <meta name="theme-color" content="#121110" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE_NAME} />
@@ -42,7 +43,7 @@ const path = Astro.url.pathname;
     <a class="skip sr-only" href="#conteudo">Pular para o conteúdo</a>
     <header class="masthead">
       <div class="wrap bar">
-        <a href="/" class="mark" aria-label={`${SITE_NAME}, página inicial`}>
+        <a href={u('/')} class="mark" aria-label={`${SITE_NAME}, página inicial`}>
           <svg viewBox="0 0 40 16" width="40" height="16" aria-hidden="true">
             <path d="M0 8h9l2-6 3 12 3-10 2 7 2-5 2 2h17" />
           </svg>
@@ -54,16 +55,16 @@ const path = Astro.url.pathname;
         </p>
       </div>
       <nav class="wrap nav" aria-label="Temas">
-        <a href="/" aria-current={path === '/' ? 'page' : undefined}>Mapa</a>
+        <a href={u('/')} aria-current={path === '/' ? 'page' : undefined}>Mapa</a>
         {
           TEMAS.map((t) => (
-            <a href={`/tema/${t.slug}/`} aria-current={path.startsWith(`/tema/${t.slug}`) ? 'page' : undefined}>
+            <a href={u(`/tema/${t.slug}/`)} aria-current={path.startsWith(`/tema/${t.slug}`) ? 'page' : undefined}>
               {t.nome}
             </a>
           ))
         }
-        <a href="/paises/" aria-current={path.startsWith('/pais') ? 'page' : undefined}>Países</a>
-        <a href="/metodologia/" aria-current={path.startsWith('/metodologia') ? 'page' : undefined}>Metodologia</a>
+        <a href={u('/paises/')} aria-current={path.startsWith('/pais') ? 'page' : undefined}>Países</a>
+        <a href={u('/metodologia/')} aria-current={path.startsWith('/metodologia') ? 'page' : undefined}>Metodologia</a>
       </nav>
     </header>
 
@@ -93,11 +94,11 @@ const path = Astro.url.pathname;
         <div>
           <p class="label">Site</p>
           <p class="small links">
-            <a href="/sobre/">Sobre</a>
-            <a href="/metodologia/">Metodologia</a>
-            <a href="/privacidade/">Privacidade</a>
-            <a href="/contato/">Contato</a>
-            <a href="/rss.xml">RSS</a>
+            <a href={u('/sobre/')}>Sobre</a>
+            <a href={u('/metodologia/')}>Metodologia</a>
+            <a href={u('/privacidade/')}>Privacidade</a>
+            <a href={u('/contato/')}>Contato</a>
+            <a href={u('/rss.xml')}>RSS</a>
           </p>
         </div>
       </div>

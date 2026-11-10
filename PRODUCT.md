@@ -21,7 +21,7 @@ Visitas curtas e frequentes, majoritariamente mobile. Páginas por país e por t
 ## Capabilities and Constraints
 - Site 100% estático (Astro), reconstruído a cada coleta; dados em `data/*.json` gerados por `collector/`.
 - 4 temas: ciber, conflito, energia, desastre. Janelas 24h e 7d.
-- Infra a custo zero (Cloudflare Pages, GitHub Actions). Sem IA/resumos pagos por enquanto.
+- Infra a custo zero (GitHub Pages + GitHub Actions). Sem IA/resumos pagos por enquanto.
 - Manchetes da imprensa vêm no idioma original (maioria inglês); textos do site em PT-BR.
 - Espaços de anúncio previstos no layout (AdSense depois de aprovação; A-Ads antes).
 - Blockchain (espelho IPFS, prova on-chain) é fase futura — não prometer no site ainda.

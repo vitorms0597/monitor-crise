@@ -4,7 +4,7 @@ import AdSlot from '../components/AdSlot.astro';
 import Feed from '../components/Feed.astro';
 import HeatMap from '../components/HeatMap.astro';
 import Seismogram from '../components/Seismogram.astro';
-import { SITE_NAME, SITE_URL, TEMAS } from '../config';
+import { SITE_NAME, SITE_URL, TEMAS, u } from '../config';
 import { countries, countryPages, feed, heat, hourAxis, hourlyWorld, newsCount } from '../lib/data';
 import { num, pct } from '../lib/format';
 
@@ -12,7 +12,7 @@ const axis = hourAxis();
 const world = hourlyWorld();
 const bands = TEMAS.map((t) => ({
   label: t.nome,
-  href: `/tema/${t.slug}/`,
+  href: u(`/tema/${t.slug}/`),
   values: world[t.id],
   total: world[t.id].reduce((a, b) => a + b, 0),
 }));
@@ -36,7 +36,7 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: SIT
       e conflitos, <strong class="num">{num(per.find((p) => p.t.id === 'desastre')!.n)}</strong> de desastres,
       <strong class="num">{num(per.find((p) => p.t.id === 'ciber')!.n)}</strong> de ciberataques e
       <strong class="num">{num(per.find((p) => p.t.id === 'energia')!.n)}</strong> de apagões.
-      {lead.n > 0 && <>O traço mais forte é o de <a href={`/tema/${lead.t.slug}/`}>{lead.t.nome.toLowerCase()}</a>.</>}
+      {lead.n > 0 && <>O traço mais forte é o de <a href={u(`/tema/${lead.t.slug}/`)}>{lead.t.nome.toLowerCase()}</a>.</>}
     </p>
   </section>
 
@@ -68,7 +68,7 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: SIT
         <ul class="rising">
           {rising.map(({ c, p }) => (
             <li>
-              {pageSet.has(c.iso3) ? <a href={`/pais/${c.slug}/`}>{c.nome}</a> : <span>{c.nome}</span>}
+              {pageSet.has(c.iso3) ? <a href={u(`/pais/${c.slug}/`)}>{c.nome}</a> : <span>{c.nome}</span>}
               <span class="num amber">{pct(p.variacao)}</span>
               <span class="num small">
                 {num(p.anterior)} → {num(p.total)} registros
@@ -83,7 +83,7 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: SIT
   <section class="wrap section feed-wrap" aria-labelledby="ultimos">
     <div class="section-head">
       <h2 id="ultimos">Últimos registros</h2>
-      <a class="label" href="/rss.xml">RSS</a>
+      <a class="label" href={u('/rss.xml')}>RSS</a>
     </div>
     <Feed items={items} />
   </section>

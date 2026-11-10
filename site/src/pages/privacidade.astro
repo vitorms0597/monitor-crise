@@ -1,6 +1,6 @@
 ---
 import Page from '../layouts/Page.astro';
-import { CONTACT_EMAIL, SITE_NAME } from '../config';
+import { CONTACT_LABEL, CONTACT_URL, SITE_NAME } from '../config';
 ---
 
 <Page title="Política de privacidade" description={`Como o ${SITE_NAME} trata dados e cookies, conforme a LGPD.`}>
@@ -20,5 +20,5 @@ import { CONTACT_EMAIL, SITE_NAME } from '../config';
   <h2>Links externos</h2>
   <p>Os registros apontam para sites de terceiros, que têm suas próprias políticas de privacidade.</p>
   <h2>Contato</h2>
-  <p>Pedidos sobre privacidade: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+  <p>Pedidos sobre privacidade: <a href={CONTACT_URL}>{CONTACT_LABEL}</a>.</p>
 </Page>

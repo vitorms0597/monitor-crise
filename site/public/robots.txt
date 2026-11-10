@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://monitordecrises.com.br/sitemap-index.xml

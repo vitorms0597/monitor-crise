@@ -1,6 +1,6 @@
 ---
 import Page from '../layouts/Page.astro';
-import { SITE_NAME } from '../config';
+import { SITE_NAME, u } from '../config';
 ---
 
 <Page title="Sobre" description={`O que é o ${SITE_NAME}, de onde vêm os dados e como o site se mantém.`}>
@@ -23,5 +23,5 @@ import { SITE_NAME } from '../config';
     O site é gratuito e se mantém com anúncios exibidos em espaços marcados como "Publicidade". Os anunciantes não têm
     nenhuma influência sobre os dados.
   </p>
-  <p>Dúvidas, correções e sugestões: veja a página de <a href="/contato/">contato</a>.</p>
+  <p>Dúvidas, correções e sugestões: veja a página de <a href={u('/contato/')}>contato</a>.</p>
 </Page>

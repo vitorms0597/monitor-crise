@@ -16,14 +16,22 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: write # grava o branch data
+  pages: write
+  id-token: write
 
 jobs:
   coleta:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     env:
-      SITE_URL: ${{ vars.SITE_URL || 'https://monitordecrises.com.br' }}
+      # GitHub Pages: https://<usuário>.github.io/monitor-crises/. Com domínio próprio, defina as variáveis
+      # do repositório SITE_URL=https://seudominio.com.br e BASE_PATH=/
+      SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io', github.repository_owner) }}
+      BASE_PATH: ${{ vars.BASE_PATH || '/monitor-crises' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -64,9 +72,9 @@ jobs:
           npm ci
           npx astro build
 
-      - name: Publica no Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy site/dist --project-name=monitor-crises --branch=main --commit-dirty=true
+          path: site/dist
+      - name: Publica no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

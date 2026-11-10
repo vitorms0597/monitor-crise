@@ -1,12 +1,12 @@
 ---
-import { ADSENSE_CLIENT } from '../config';
+import { ADSENSE_CLIENT, u } from '../config';
 ---
 
 {
   ADSENSE_CLIENT && (
     <div class="consent" hidden data-client={ADSENSE_CLIENT}>
       <p>
-        Usamos cookies de publicidade para manter o site gratuito. Veja a <a href="/privacidade/">política de privacidade</a>.
+        Usamos cookies de publicidade para manter o site gratuito. Veja a <a href={u('/privacidade/')}>política de privacidade</a>.
       </p>
       <div class="actions">
         <button type="button" data-choice="no">

@@ -1,4 +1,5 @@
 ---
+import { u } from '../config';
 import Base from '../layouts/Base.astro';
 import { countryPages, heat } from '../lib/data';
 import { num } from '../lib/format';
@@ -34,7 +35,7 @@ const CONT: Record<string, string> = {
           <ul>
             {list.map((c) => (
               <li>
-                <a href={`/pais/${c.slug}/`}>{c.nome}</a>
+                <a href={u(`/pais/${c.slug}/`)}>{c.nome}</a>
                 <span class="num">{num(h7.paises[c.iso3]?.total ?? 0)}</span>
               </li>
             ))}

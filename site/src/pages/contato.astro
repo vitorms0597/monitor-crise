@@ -1,10 +1,10 @@
 ---
 import Page from '../layouts/Page.astro';
-import { CONTACT_EMAIL } from '../config';
+import { CONTACT_LABEL, CONTACT_URL } from '../config';
 ---
 
 <Page title="Contato" description="Fale com o Monitor de Crises: correções, sugestões de fontes e publicidade.">
-  <p>Escreva para <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+  <p>Fale com a gente pelas <a href={CONTACT_URL}>{CONTACT_LABEL}</a>.</p>
   <ul>
     <li><strong>Correções:</strong> envie o link do registro e o que está errado.</li>
     <li><strong>Sugestões de fontes:</strong> só aceitamos fontes primárias, públicas e gratuitas.</li>

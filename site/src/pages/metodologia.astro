@@ -1,4 +1,5 @@
 ---
+import { u } from '../config';
 import Page from '../layouts/Page.astro';
 ---
 
@@ -47,6 +48,6 @@ import Page from '../layouts/Page.astro';
   <ul>
     <li>Países com mais imprensa (como os Estados Unidos) tendem a ter mais registros. Calor alto significa <em>mais falado</em>, não necessariamente <em>mais grave</em>.</li>
     <li>A maioria das manchetes está em inglês, no idioma original da fonte.</li>
-    <li>A classificação por palavras-chave erra às vezes. Se encontrar um registro fora do lugar, <a href="/contato/">avise</a>.</li>
+    <li>A classificação por palavras-chave erra às vezes. Se encontrar um registro fora do lugar, <a href={u('/contato/')}>avise</a>.</li>
   </ul>
 </Page>

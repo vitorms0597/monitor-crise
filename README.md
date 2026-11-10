@@ -19,18 +19,16 @@ python3 -m venv .venv && .venv/bin/pip install httpx pytest
 cd site && npm install && npm run dev               # http://localhost:4321
 ```
 
-## Publicar (uma vez)
+## Publicação (GitHub Pages)
 
-1. Crie um repositório **público** no GitHub (minutos de Actions ilimitados) e faça push deste projeto.
-2. No Cloudflare (plano grátis), crie o projeto Pages: `npx wrangler pages project create monitor-crises --production-branch=main`.
-3. Gere um API token no Cloudflare com permissão *Cloudflare Pages: Edit*.
-4. No GitHub, em *Settings → Secrets and variables → Actions*:
-   - secrets `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`
-   - variável `SITE_URL` (ex.: `https://monitordecrises.com.br`)
-5. Rode o workflow **Coleta e deploy** manualmente uma vez com `backfill_horas = 48`.
-6. Aponte o domínio para o projeto em *Cloudflare Pages → Custom domains*.
+O workflow **Coleta e deploy** roda a cada 30 minutos: coleta, grava os dados no branch `data`
+(sempre um único commit, então o repositório não cresce), gera o site e publica no GitHub Pages em
+`https://<usuário>.github.io/monitor-crises/`.
 
-Os dados ficam no branch `data`, regravado a cada coleta como um único commit (o repositório não cresce).
+- Pages precisa estar ativado com origem **GitHub Actions** (*Settings → Pages*).
+- Primeira publicação: rode o workflow manualmente com `backfill_horas = 48`.
+- Domínio próprio: configure em *Settings → Pages → Custom domain* e crie as variáveis de repositório
+  `SITE_URL=https://seudominio.com.br` e `BASE_PATH=/`.
 
 ## Anúncios
 
