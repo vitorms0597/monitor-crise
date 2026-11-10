@@ -125,7 +125,7 @@
   "fips": [
    "AM"
   ],
-  "nome": "Arménia",
+  "nome": "Armênia",
   "nome_en": "Armenia",
   "slug": "armenia",
   "continente": "Asia",
@@ -275,9 +275,9 @@
   "fips": [
    "BN"
   ],
-  "nome": "Benim",
+  "nome": "Benin",
   "nome_en": "Benin",
-  "slug": "benim",
+  "slug": "benin",
   "continente": "Africa",
   "centro": [
    2.352,
@@ -380,9 +380,9 @@
   "fips": [
    "TB"
   ],
-  "nome": "Coletividade de São Bartolomeu",
+  "nome": "São Bartolomeu",
   "nome_en": "Saint Barthélemy",
-  "slug": "coletividade-de-sao-bartolomeu",
+  "slug": "sao-bartolomeu",
   "continente": "North America",
   "centro": [
    -62.833,
@@ -770,9 +770,9 @@
   "fips": [
    "CJ"
   ],
-  "nome": "Ilhas Caimão",
+  "nome": "Ilhas Cayman",
   "nome_en": "Cayman Islands",
-  "slug": "ilhas-caimao",
+  "slug": "ilhas-cayman",
   "continente": "North America",
   "centro": [
    -81.241,
@@ -813,9 +813,9 @@
   "fips": [
    "EZ"
   ],
-  "nome": "Chéquia",
+  "nome": "Tchéquia",
   "nome_en": "Czech Republic",
-  "slug": "chequia",
+  "slug": "tchequia",
   "continente": "Europe",
   "centro": [
    15.378,
@@ -963,9 +963,9 @@
   "fips": [
    "WI"
   ],
-  "nome": "Sara Ocidental",
+  "nome": "Saara Ocidental",
   "nome_en": "Western Sahara",
-  "slug": "sara-ocidental",
+  "slug": "saara-ocidental",
   "continente": "Africa",
   "centro": [
    -12.63,
@@ -993,7 +993,7 @@
   "fips": [
    "EN"
   ],
-  "nome": "Estónia",
+  "nome": "Estônia",
   "nome_en": "Estonia",
   "slug": "estonia",
   "continente": "Europe",
@@ -1083,9 +1083,9 @@
   "fips": [
    "FO"
   ],
-  "nome": "Ilhas Feroe",
+  "nome": "Ilhas Faroé",
   "nome_en": "Faroe Islands",
-  "slug": "ilhas-feroe",
+  "slug": "ilhas-faroe",
   "continente": "Europe",
   "centro": [
    -7.058,
@@ -1488,9 +1488,9 @@
   "fips": [
    "EI"
   ],
-  "nome": "República da Irlanda",
+  "nome": "Irlanda",
   "nome_en": "Ireland",
-  "slug": "republica-da-irlanda",
+  "slug": "irlanda",
   "continente": "Europe",
   "centro": [
    -7.799,
@@ -1503,9 +1503,9 @@
   "fips": [
    "IR"
   ],
-  "nome": "Irão",
+  "nome": "Irã",
   "nome_en": "Iran",
-  "slug": "irao",
+  "slug": "ira",
   "continente": "Asia",
   "centro": [
    54.931,
@@ -1653,7 +1653,7 @@
   "fips": [
    "KE"
   ],
-  "nome": "Quénia",
+  "nome": "Quênia",
   "nome_en": "Kenya",
   "slug": "quenia",
   "continente": "Africa",
@@ -1923,7 +1923,7 @@
   "fips": [
    "LG"
   ],
-  "nome": "Letónia",
+  "nome": "Letônia",
   "nome_en": "Latvia",
   "slug": "letonia",
   "continente": "Europe",
@@ -1983,7 +1983,7 @@
   "fips": [
    "MN"
   ],
-  "nome": "Mónaco",
+  "nome": "Mônaco",
   "nome_en": "Monaco",
   "slug": "monaco",
   "continente": "Europe",
@@ -2013,7 +2013,7 @@
   "fips": [
    "MA"
   ],
-  "nome": "Madagáscar",
+  "nome": "Madagascar",
   "nome_en": "Madagascar",
   "slug": "madagascar",
   "continente": "Africa",
@@ -2073,7 +2073,7 @@
   "fips": [
    "MK"
   ],
-  "nome": "Macedónia do Norte",
+  "nome": "Macedônia do Norte",
   "nome_en": "North Macedonia",
   "slug": "macedonia-do-norte",
   "continente": "Europe",
@@ -2223,9 +2223,9 @@
   "fips": [
    "MP"
   ],
-  "nome": "Maurícia",
+  "nome": "Maurício",
   "nome_en": "Mauritius",
-  "slug": "mauricia",
+  "slug": "mauricio",
   "continente": "Seven seas (open ocean)",
   "centro": [
    57.566,
@@ -2238,9 +2238,9 @@
   "fips": [
    "MI"
   ],
-  "nome": "Malawi",
+  "nome": "Malauí",
   "nome_en": "Malawi",
-  "slug": "malawi",
+  "slug": "malaui",
   "continente": "Africa",
   "centro": [
    33.608,
@@ -2283,7 +2283,7 @@
   "fips": [
    "NC"
   ],
-  "nome": "Nova Caledónia",
+  "nome": "Nova Caledônia",
   "nome_en": "New Caledonia",
   "slug": "nova-caledonia",
   "continente": "Oceania",
@@ -2568,7 +2568,7 @@
   "fips": [
    "PL"
   ],
-  "nome": "Polónia",
+  "nome": "Polônia",
   "nome_en": "Poland",
   "slug": "polonia",
   "continente": "Europe",
@@ -2689,7 +2689,7 @@
   "fips": [
    "RO"
   ],
-  "nome": "Roménia",
+  "nome": "Romênia",
   "nome_en": "Romania",
   "slug": "romenia",
   "continente": "Europe",
@@ -3002,7 +3002,7 @@
   "fips": [
    "SI"
   ],
-  "nome": "Eslovénia",
+  "nome": "Eslovênia",
   "nome_en": "Slovenia",
   "slug": "eslovenia",
   "continente": "Europe",
@@ -3152,9 +3152,9 @@
   "fips": [
    "TI"
   ],
-  "nome": "Tajiquistão",
+  "nome": "Tadjiquistão",
   "nome_en": "Tajikistan",
-  "slug": "tajiquistao",
+  "slug": "tadjiquistao",
   "continente": "Asia",
   "centro": [
    72.587,
@@ -3452,9 +3452,9 @@
   "fips": [
    "VM"
   ],
-  "nome": "Vietname",
+  "nome": "Vietnã",
   "nome_en": "Vietnam",
-  "slug": "vietname",
+  "slug": "vietna",
   "continente": "Asia",
   "centro": [
    105.387,
@@ -3512,7 +3512,7 @@
   "fips": [
    "YM"
   ],
-  "nome": "Iémen",
+  "nome": "Iêmen",
   "nome_en": "Yemen",
   "slug": "iemen",
   "continente": "Asia",

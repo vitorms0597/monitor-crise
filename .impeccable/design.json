@@ -1,0 +1,435 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-10T10:57:27.667955+00:00",
+  "title": "Design System: Monitor de Crises",
+  "extensions": {
+    "colorMeta": {
+      "soot": {
+        "role": "neutral",
+        "displayName": "Soot",
+        "canonical": "oklch(17.8% 0.003 67.7)",
+        "tonalRamp": [
+          "#0c0b0a",
+          "#252423",
+          "#413f3e",
+          "#5f5d5c",
+          "#7e7d7c",
+          "#9f9e9d",
+          "#c5c4c2",
+          "#f0eeed"
+        ]
+      },
+      "soot-deep": {
+        "role": "neutral",
+        "displayName": "Deep Soot",
+        "canonical": "oklch(15.0% 0.003 67.5)",
+        "tonalRamp": [
+          "#0c0b0a",
+          "#252423",
+          "#413f3e",
+          "#5f5d5c",
+          "#7e7d7b",
+          "#9f9e9d",
+          "#c5c4c2",
+          "#f0eeec"
+        ]
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "oklch(28.6% 0.006 78.2)",
+        "tonalRamp": [
+          "#0d0b08",
+          "#262421",
+          "#413f3c",
+          "#5f5d5a",
+          "#7f7d79",
+          "#a09e9a",
+          "#c6c4c0",
+          "#f1eeea"
+        ]
+      },
+      "graphite-2": {
+        "role": "neutral",
+        "displayName": "Graphite Light",
+        "canonical": "oklch(35.4% 0.008 75.3)",
+        "tonalRamp": [
+          "#0d0b08",
+          "#262420",
+          "#423f3b",
+          "#605d59",
+          "#807d78",
+          "#a19e99",
+          "#c7c3be",
+          "#f2eee9"
+        ]
+      },
+      "ash": {
+        "role": "neutral",
+        "displayName": "Ash",
+        "canonical": "oklch(63.0% 0.018 79.3)",
+        "tonalRamp": [
+          "#0f0a04",
+          "#29231a",
+          "#453f35",
+          "#635d52",
+          "#837c71",
+          "#a59d92",
+          "#cac3b7",
+          "#f5ede1"
+        ]
+      },
+      "bone-dim": {
+        "role": "neutral",
+        "displayName": "Bone Dim",
+        "canonical": "oklch(75.0% 0.020 83.1)",
+        "tonalRamp": [
+          "#0f0a03",
+          "#292319",
+          "#453f34",
+          "#635d51",
+          "#837c70",
+          "#a49e91",
+          "#cac3b6",
+          "#f5eee0"
+        ]
+      },
+      "bone": {
+        "role": "neutral",
+        "displayName": "Bone",
+        "canonical": "oklch(92.6% 0.023 87.2)",
+        "tonalRamp": [
+          "#0f0a02",
+          "#292317",
+          "#453f32",
+          "#635d4f",
+          "#837d6e",
+          "#a49e8f",
+          "#cac4b4",
+          "#f5eede"
+        ]
+      },
+      "amber": {
+        "role": "primary",
+        "displayName": "Annotation Amber",
+        "canonical": "oklch(76.5% 0.140 72.9)",
+        "tonalRamp": [
+          "#230000",
+          "#451100",
+          "#692d00",
+          "#8b4c00",
+          "#ae6d00",
+          "#d28f21",
+          "#fab552",
+          "#ffe290"
+        ]
+      },
+      "heat-0": {
+        "role": "heat-scale",
+        "displayName": "Heat 0",
+        "canonical": "oklch(23.2% 0.005 67.6)",
+        "tonalRamp": [
+          "#121110",
+          "#1f1d1b",
+          "#3b2a17",
+          "#6b4416",
+          "#a8661b",
+          "#e8a33d",
+          "#f6dba6",
+          "#ede6d6"
+        ]
+      },
+      "heat-1": {
+        "role": "heat-scale",
+        "displayName": "Heat 1",
+        "canonical": "oklch(30.0% 0.040 68.4)",
+        "tonalRamp": [
+          "#121110",
+          "#1f1d1b",
+          "#3b2a17",
+          "#6b4416",
+          "#a8661b",
+          "#e8a33d",
+          "#f6dba6",
+          "#ede6d6"
+        ]
+      },
+      "heat-2": {
+        "role": "heat-scale",
+        "displayName": "Heat 2",
+        "canonical": "oklch(42.3% 0.080 66.4)",
+        "tonalRamp": [
+          "#121110",
+          "#1f1d1b",
+          "#3b2a17",
+          "#6b4416",
+          "#a8661b",
+          "#e8a33d",
+          "#f6dba6",
+          "#ede6d6"
+        ]
+      },
+      "heat-3": {
+        "role": "heat-scale",
+        "displayName": "Heat 3",
+        "canonical": "oklch(57.1% 0.119 63.4)",
+        "tonalRamp": [
+          "#121110",
+          "#1f1d1b",
+          "#3b2a17",
+          "#6b4416",
+          "#a8661b",
+          "#e8a33d",
+          "#f6dba6",
+          "#ede6d6"
+        ]
+      },
+      "heat-4": {
+        "role": "heat-scale",
+        "displayName": "Heat 4",
+        "canonical": "oklch(76.5% 0.140 72.9)",
+        "tonalRamp": [
+          "#121110",
+          "#1f1d1b",
+          "#3b2a17",
+          "#6b4416",
+          "#a8661b",
+          "#e8a33d",
+          "#f6dba6",
+          "#ede6d6"
+        ]
+      },
+      "heat-5": {
+        "role": "heat-scale",
+        "displayName": "Heat 5",
+        "canonical": "oklch(90.1% 0.075 84.0)",
+        "tonalRamp": [
+          "#121110",
+          "#1f1d1b",
+          "#3b2a17",
+          "#6b4416",
+          "#a8661b",
+          "#e8a33d",
+          "#f6dba6",
+          "#ede6d6"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page H1; condensed, tight tracking."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section heads, ruled underneath."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Fact values on country pages."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Feed item headlines; official events step to 620."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default reading text, tabular numerals."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Factual intro sentence under H1, bone-dim."
+      },
+      "margin-label": {
+        "displayName": "Margin Label",
+        "purpose": "Seismogram band names in the left margin."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Observatory annotations: section meta, feed meta, stamps, ticks."
+      },
+      "annotation": {
+        "displayName": "Annotation",
+        "purpose": "Amber peak labels knocked out of soot on the plot."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tooltip-lift",
+        "value": "0 4px 14px rgb(0 0 0 / 0.5)",
+        "purpose": "Map hover tooltip (inverted bone overlay)."
+      },
+      {
+        "name": "banner-lift",
+        "value": "0 10px 30px rgb(0 0 0 / 0.6)",
+        "purpose": "Fixed consent banner (inverted bone overlay)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Trace record reveal and state transitions."
+      },
+      {
+        "name": "record",
+        "value": "clip-path inset(0 100% 0 0) to inset(0 0 0 0), 1.8s ease-out, once, staggered per band",
+        "purpose": "The single authored motion: traces record left-to-right once; instant under reduced motion."
+      },
+      {
+        "name": "state",
+        "value": "0.2s ease-out (fill 0.5s on map land)",
+        "purpose": "Hover/pressed colour transitions on filters and map fills."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "stack-head",
+        "value": "560px"
+      },
+      {
+        "name": "seismo-ticks",
+        "value": "640px"
+      },
+      {
+        "name": "footer",
+        "value": "720px"
+      },
+      {
+        "name": "map-ranking",
+        "value": "860px"
+      },
+      {
+        "name": "max",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Seismogram Band",
+      "kind": "custom",
+      "refersTo": "peak-annotation",
+      "description": "One theme band of the drum: condensed margin label, millimetre-grid plot, bone trace with amber peak and needle.",
+      "html": "<div class=\"ds-band\"><div class=\"ds-side\"><span class=\"ds-name\">Conflito</span><span class=\"ds-total\">1.204 em 24h</span></div><div class=\"ds-plot\"><svg viewBox=\"0 0 300 60\" preserveAspectRatio=\"none\"><line x1=\"0\" y1=\"50\" x2=\"300\" y2=\"50\" class=\"ds-base\"/><rect x=\"0\" y=\"0\" width=\"60\" height=\"60\" class=\"ds-void\"/><path class=\"ds-ink\" d=\"M60 50 L80 46 L100 48 L120 40 L140 44 L160 30 L180 42 L200 38\"/><path class=\"ds-ink ds-peak\" d=\"M200 38 L215 8 L230 36\"/><path class=\"ds-ink\" d=\"M230 36 L250 44 L270 40 L292 46\"/><line x1=\"292\" y1=\"0\" x2=\"292\" y2=\"60\" class=\"ds-needle\"/></svg><span class=\"ds-void-label\">antes da coleta</span><span class=\"ds-peak-label\">pico 14h · 1.204</span></div></div>",
+      "css": ".ds-band{display:grid;grid-template-columns:140px 1fr;align-items:center;border-block:1px solid #2c2a27;background:#121110;color:#ede6d6;font-family:'Archivo Variable','Archivo',system-ui,sans-serif;font-variant-numeric:tabular-nums}.ds-side{display:flex;flex-direction:column;gap:2px;padding-right:12px}.ds-name{font-stretch:78%;font-weight:620;font-size:1rem}.ds-total{color:#8f887d;font-size:.8rem}.ds-plot{position:relative;background-image:linear-gradient(#0c0b0a 1px,transparent 1px),linear-gradient(90deg,#0c0b0a 1px,transparent 1px);background-size:12px 12px}.ds-plot svg{display:block;width:100%;height:64px;overflow:visible;animation:ds-record 1.8s cubic-bezier(.16,1,.3,1) both}.ds-base{stroke:#3e3b37;stroke-width:1;vector-effect:non-scaling-stroke}.ds-void{fill:#121110}.ds-ink{fill:none;stroke:#ede6d6;stroke-width:2;vector-effect:non-scaling-stroke}.ds-peak{stroke:#e8a33d}.ds-needle{stroke:#e8a33d;stroke-width:1.5;vector-effect:non-scaling-stroke}.ds-void-label{position:absolute;left:0;width:20%;top:50%;transform:translateY(-50%);text-align:center;font-size:.7rem;font-stretch:72%;color:#8f887d}.ds-peak-label{position:absolute;top:1px;left:72%;font-size:.68rem;font-stretch:72%;font-weight:600;color:#e8a33d;background:#121110;padding:0 3px;white-space:nowrap}@keyframes ds-record{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}@media (prefers-reduced-motion:reduce){.ds-plot svg{animation:none}}"
+    },
+    {
+      "name": "Segmented Filter",
+      "kind": "chip",
+      "refersTo": "segment-button",
+      "description": "Theme and window filters above the map; square, hairline-framed, pressed state inverts to bone.",
+      "html": "<div class=\"ds-seg\" role=\"group\"><button aria-pressed=\"true\">Todos</button><button aria-pressed=\"false\">Ciber</button><button aria-pressed=\"false\">Conflito</button><button aria-pressed=\"false\">Energia</button></div>",
+      "css": ".ds-seg{display:inline-flex;border:1px solid #3e3b37;background:#121110}.ds-seg button{font-family:'Archivo Variable','Archivo',system-ui,sans-serif;font-stretch:78%;font-weight:560;font-size:.85rem;color:#b4ada0;background:transparent;border:0;border-right:1px solid #3e3b37;padding:7px 12px;min-height:36px;cursor:pointer;transition:background .2s cubic-bezier(.16,1,.3,1),color .2s cubic-bezier(.16,1,.3,1)}.ds-seg button:last-child{border-right:0}.ds-seg button:hover{color:#ede6d6}.ds-seg button[aria-pressed='true']{background:#ede6d6;color:#121110}.ds-seg button:focus-visible{outline:2px solid #e8a33d;outline-offset:2px}"
+    },
+    {
+      "name": "Topic Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Condensed masthead nav; current page bone with amber 2px underline.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">Mapa</a><a href=\"#\">Ciber</a><a href=\"#\">Conflito</a><a href=\"#\">Energia</a><a href=\"#\">Desastre</a><a href=\"#\">Países</a></nav>",
+      "css": ".ds-nav{display:flex;gap:4px 20px;overflow-x:auto;background:#121110;padding:8px 0 10px;border-bottom:1px solid #3e3b37;font-family:'Archivo Variable','Archivo',system-ui,sans-serif}.ds-nav a{flex:none;font-size:.95rem;font-stretch:85%;font-weight:520;color:#b4ada0;text-decoration:none;padding:4px 0;border-bottom:2px solid transparent}.ds-nav a:hover{color:#ede6d6}.ds-nav a[aria-current='page']{color:#ede6d6;border-bottom-color:#e8a33d}.ds-nav a:focus-visible{outline:2px solid #e8a33d;outline-offset:2px}"
+    },
+    {
+      "name": "Feed Row",
+      "kind": "card",
+      "refersTo": "ruled-row",
+      "description": "Ruled list row (not a card): ash timestamp, condensed meta labels, headline linking to source.",
+      "html": "<ol class=\"ds-feed\"><li class=\"ds-evento\"><time>10/11 14:30</time><div><div class=\"ds-meta\"><span>Terremoto</span><span>Japão</span><span class=\"ds-amber\">registro oficial · nível 3/5</span></div><a class=\"ds-title\" href=\"#\">M 6.1 - 42 km E of Miyako, Japan</a><span class=\"ds-src\">USGS</span></div></li><li><time>10/11 14:05</time><div><div class=\"ds-meta\"><span>Ciber</span><span>Brasil</span><span>imprensa</span></div><a class=\"ds-title\" href=\"#\">Ataque derruba sistemas de prefeitura</a><span class=\"ds-src\">g1.globo.com</span></div></li></ol>",
+      "css": ".ds-feed{list-style:none;margin:0;padding:0;background:#121110;color:#ede6d6;font-family:'Archivo Variable','Archivo',system-ui,sans-serif;font-variant-numeric:tabular-nums}.ds-feed li{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:4px 16px;padding:12px 0;border-bottom:1px solid #2c2a27}.ds-feed time{color:#8f887d;font-size:.85rem;padding-top:2px}.ds-meta{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:.7rem;font-stretch:72%;font-weight:560;letter-spacing:.06em;text-transform:uppercase;color:#8f887d}.ds-amber{color:#e8a33d}.ds-title{display:block;margin-top:3px;font-size:1.02rem;font-weight:520;line-height:1.35;color:inherit;text-decoration:none}.ds-evento .ds-title{font-weight:620}.ds-title:hover{text-decoration:underline;text-decoration-color:#e8a33d;text-underline-offset:.2em}.ds-title:focus-visible{outline:2px solid #e8a33d;outline-offset:2px}.ds-src{font-size:.8rem;color:#8f887d}"
+    },
+    {
+      "name": "Ranking Row",
+      "kind": "custom",
+      "refersTo": "ruled-row",
+      "description": "'Onde está tremendo' ranking: position, country, mini trace, value, variation (amber when rising, multiplier above +100%).",
+      "html": "<ol class=\"ds-rank\"><li><span class=\"ds-pos\">1</span><a href=\"#\">Ucrânia</a><svg class=\"ds-mini\" viewBox=\"0 0 64 20\" preserveAspectRatio=\"none\"><path d=\"M0 16 L10 14 L20 15 L30 9 L40 12 L50 3 L64 8\"/></svg><span class=\"ds-val\">842</span><span class=\"ds-var ds-up\">×13,8</span></li><li><span class=\"ds-pos\">2</span><a href=\"#\">Israel</a><svg class=\"ds-mini\" viewBox=\"0 0 64 20\" preserveAspectRatio=\"none\"><path d=\"M0 10 L10 12 L20 9 L30 11 L40 10 L50 12 L64 11\"/></svg><span class=\"ds-val\">611</span><span class=\"ds-var\">−4%</span></li></ol>",
+      "css": ".ds-rank{list-style:none;margin:0;padding:0;background:#121110;color:#ede6d6;font-family:'Archivo Variable','Archivo',system-ui,sans-serif;font-variant-numeric:tabular-nums}.ds-rank li{display:grid;grid-template-columns:1.6em minmax(0,1fr) 64px 4.2em 4.4em;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #2c2a27;font-size:.95rem}.ds-rank a{color:inherit;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ds-rank a:hover{color:#e8a33d}.ds-rank a:focus-visible{outline:2px solid #e8a33d;outline-offset:2px}.ds-pos{color:#8f887d;font-size:.8rem}.ds-mini{width:64px;height:20px}.ds-mini path{fill:none;stroke:#b4ada0;stroke-width:1;vector-effect:non-scaling-stroke}.ds-val{text-align:right;font-weight:600}.ds-var{text-align:right;font-size:.8rem;color:#8f887d}.ds-up{color:#e8a33d}"
+    },
+    {
+      "name": "Section Head",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "H2 left, condensed ash label right, graphite rule beneath.",
+      "html": "<div class=\"ds-head\"><h2>Onde está tremendo</h2><span class=\"ds-label\">24h comparadas às 24h anteriores</span></div>",
+      "css": ".ds-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:12px;border-bottom:1px solid #2c2a27;background:#121110;color:#ede6d6;font-family:'Archivo Variable','Archivo',system-ui,sans-serif}.ds-head h2{margin:0;font-size:1.6rem;font-weight:640;line-height:1.1;letter-spacing:-.02em}.ds-label{font-stretch:72%;font-weight:560;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:#8f887d;text-align:right}"
+    },
+    {
+      "name": "Consent Buttons",
+      "kind": "button",
+      "refersTo": "button-on-bone-primary",
+      "description": "The only true buttons: square, soot-bordered, on the inverted bone banner.",
+      "html": "<div class=\"ds-banner\"><p>Usamos cookies de publicidade para manter o site gratuito.</p><button class=\"ds-btn\">Recusar</button><button class=\"ds-btn ds-btn-primary\">Aceitar</button></div>",
+      "css": ".ds-banner{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:#ede6d6;color:#121110;padding:16px;box-shadow:0 10px 30px rgb(0 0 0 / .6);font-family:'Archivo Variable','Archivo',system-ui,sans-serif;font-size:.9rem}.ds-banner p{flex:1 1 240px;margin:0}.ds-btn{font:inherit;font-weight:600;padding:8px 14px;min-height:40px;border:1px solid #121110;background:transparent;color:#121110;cursor:pointer;border-radius:0}.ds-btn-primary{background:#121110;color:#ede6d6}.ds-btn:focus-visible{outline:2px solid #e8a33d;outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Smoked Drum",
+    "overview": "The site is a seismograph drum read in the dark. The page is soot; every theme is a bone-coloured trace scratched through it; the observatory's annotations sit in the margin in condensed capitals; one amber pencil marks what the reader must look at now: the needle, the \"agora\" tick, the peak of each band, a rising variation, a link. The amplitude of each hour is the real volume (news plus weighted official events), so the drawing is the data, never decoration.\n\nDensity is high and quiet. Information is organised as ruled lists separated by graphite hairlines, not as boxes. The instrument surfaces (the seismogram plot and the choropleth map) carry a millimetre drum-paper grid; the page body around them is plain soot. Depth is almost absent: surfaces are flat and tonal, and only floating overlays (tooltip, consent banner) lift off the paper. Tone is cold and factual PT-BR; big rises read as multipliers (\"×13,8\") instead of four-digit percentages.\n\nThe world refuses the neon war-room dashboard (glowing cyan, radar sweeps, red alarms) and the white news portal (cards, photos, headline hierarchy). Both refusals are visible in the build: no saturated hue other than amber, no card containers, no imagery.",
+    "keyCharacteristics": [
+      "Soot ground, bone trace, graphite rules, one amber pencil.",
+      "Archivo variable with its width axis doing the work: condensed for margin labels and annotations, near-normal for reading.",
+      "Tabular numerals everywhere (set on `body`).",
+      "Ruled lists, square corners, flat surfaces.",
+      "Millimetre grid only on instrument surfaces.",
+      "One authored motion: traces record left-to-right once.",
+      "Time before collection began is left blank and labelled \"antes da coleta\", never drawn as calm."
+    ],
+    "rules": [
+      {
+        "name": "The One Pencil Rule",
+        "body": "Amber is the only chromatic accent and it always means \"look here\": now, peak, rise, link, focus. Never use it for decoration, fills of large areas, or category colour (heat bins excepted).",
+        "section": "colors"
+      },
+      {
+        "name": "The Blank Before Collection Rule",
+        "body": "Hours with no collection are filled with soot and labelled \"antes da coleta\" in ash. Never draw them as a flat zero line; absence of data is not calm.",
+        "section": "colors"
+      },
+      {
+        "name": "The Width Axis Rule",
+        "body": "Hierarchy between reading text and annotation is made with width and case, not with a second family. Margin and plot annotations are condensed (72% to 78%); reading text is never condensed below 85%.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "All numerals are tabular. Variations of +100% or more are written as multipliers (\"×13,8\").",
+        "section": "typography"
+      },
+      {
+        "name": "The Paper Stays Flat Rule",
+        "body": "Anything resting on the page is flat and ruled. A shadow appears only on an inverted bone overlay that floats above content.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Ruled List Rule",
+        "body": "Content is grouped by hairline rules, not by cards. No filled or bordered tiles for feed items, rankings or rising themes.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Instrument Grid Rule",
+        "body": "The 12px millimetre grid (deep-soot lines) appears only on instrument surfaces: the seismogram plot and the choropleth map. Compact mini-traces and the page body carry no grid.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** keep amber for now, peak, rise, link and focus only (The One Pencil Rule).",
+      "**Do** separate content with 1px graphite hairlines and keep every corner square.",
+      "**Do** use the width axis for hierarchy: condensed 72% to 78% uppercase labels in ash for annotations, normal width for reading.",
+      "**Do** set all numbers tabular and write rises of +100% or more as multipliers (\"×13,8\").",
+      "**Do** leave pre-collection hours blank in soot with an \"antes da coleta\" label.",
+      "**Do** confine the 12px millimetre grid to the seismogram plot and the map.",
+      "**Do** respect reduced motion; the record-once trace reveal is the authored motion.",
+      "**Do** pair every colour-coded datum with text (ranking beside the map)."
+    ],
+    "donts": [
+      "**Don't** build cards or tiles for feed items, rankings or theme summaries; use ruled lists.",
+      "**Don't** add neon or saturated hues (cyan, red alarms, glows); the world is soot, bone, graphite and amber.",
+      "**Don't** put the millimetre grid on the page body or on compact mini-traces.",
+      "**Don't** draw missing hours as a zero line.",
+      "**Don't** add shadows to resting surfaces; only inverted bone overlays float.",
+      "**Don't** loop or replay the trace animation, or add competing motion around the instruments.",
+      "**Don't** write rises as four-digit percentages."
+    ]
+  }
+}

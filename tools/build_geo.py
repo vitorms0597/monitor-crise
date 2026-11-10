@@ -19,6 +19,21 @@ NE = "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geoj
 FIPS_OVERRIDES = {"SSD": ["OD"], "NOR": ["NO"], "ISR": ["IS"], "PSE": ["WE", "GZ"], "KOS": ["KV"]}
 SKIP = {"ALD", "IOA", "KAS"}  # Åland, Ter. australianos do Índico, Siachen
 
+# Natural Earth traz os nomes em português de Portugal; o site é PT-BR.
+PT_BR = {
+    "Arménia": "Armênia", "Benim": "Benin", "Chéquia": "Tchéquia", "Eslovénia": "Eslovênia", "Estónia": "Estônia",
+    "Ilhas Caimão": "Ilhas Cayman", "Ilhas Feroe": "Ilhas Faroé", "Irão": "Irã", "Iémen": "Iêmen", "Letónia": "Letônia",
+    "Macedónia do Norte": "Macedônia do Norte", "Madagáscar": "Madagascar", "Malawi": "Malauí", "Maurícia": "Maurício",
+    "Mónaco": "Mônaco", "Nova Caledónia": "Nova Caledônia", "Polónia": "Polônia", "Quénia": "Quênia",
+    "Roménia": "Romênia", "Sara Ocidental": "Saara Ocidental", "Tajiquistão": "Tadjiquistão", "Vietname": "Vietnã",
+    "República da Irlanda": "Irlanda", "Coletividade de São Bartolomeu": "São Bartolomeu", "Antártida": "Antártida",
+}
+
+
+def nome_pt(p):
+    nome = p["NAME_PT"] or p["NAME"]
+    return PT_BR.get(nome, nome)
+
 
 def fetch(scale):
     with urllib.request.urlopen(NE.format(scale), timeout=120) as r:
@@ -54,9 +69,9 @@ def main():
                 "iso3": code,
                 "iso2": p["ISO_A2_EH"] if p["ISO_A2_EH"] != "-99" else None,
                 "fips": fips,
-                "nome": p["NAME_PT"] or p["NAME"],
+                "nome": nome_pt(p),
                 "nome_en": p["NAME_EN"] or p["NAME"],
-                "slug": slug(p["NAME_PT"] or p["NAME"]),
+                "slug": slug(nome_pt(p)),
                 "continente": p["CONTINENT"],
                 "centro": [round(p["LABEL_X"], 3), round(p["LABEL_Y"], 3)],
             }
@@ -76,7 +91,7 @@ def main():
     for f in ne110["features"]:
         p = f["properties"]
         code = iso3(p)
-        small.append({"type": "Feature", "properties": {"iso3": code, "nome": p["NAME_PT"] or p["NAME"]},
+        small.append({"type": "Feature", "properties": {"iso3": code, "nome": nome_pt(p)},
                       "geometry": {"type": f["geometry"]["type"],
                                    "coordinates": round_coords(f["geometry"]["coordinates"])}})
     site = ROOT / "site" / "public" / "geo"

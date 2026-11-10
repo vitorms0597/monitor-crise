@@ -1,7 +1,7 @@
 ---
 // Mapa de calor + ranking "Onde está tremendo". SVG gerado no build; o script só troca tema/janela.
 import { TEMAS, type TemaId } from '../config';
-import { countries, featuredEvents, hasCountryPage, heat, hourly } from '../lib/data';
+import { countries, featuredEvents, hasCountryPage, heat, hourly, longWindowLabel } from '../lib/data';
 import { num, pct } from '../lib/format';
 import { MAP_H, MAP_W, worldMap } from '../lib/map';
 
@@ -74,7 +74,7 @@ const uid = `hm-${tema ?? 'all'}`;
             24h
           </button>
           <button type="button" data-v="b" aria-pressed="false">
-            7 dias
+            {longWindowLabel()}
           </button>
         </div>
       </div>
@@ -264,6 +264,12 @@ const uid = `hm-${tema ?? 'all'}`;
   }
   .mapbox {
     position: relative;
+  }
+  .map {
+    background-image:
+      linear-gradient(var(--soot-deep) 1px, transparent 1px),
+      linear-gradient(90deg, var(--soot-deep) 1px, transparent 1px);
+    background-size: 12px 12px;
   }
   .map {
     display: block;

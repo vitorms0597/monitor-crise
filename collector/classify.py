@@ -49,6 +49,11 @@ TITLE_RULES = [(re.compile(p), t, s) for p, t, s in TITLE_RULES]
 TITLE_EXCLUDE = re.compile(r"(trade|price|culture|tariff|bidding|talent|console|streaming) wars?|war of words|"
                            r"guerra (comercial|fiscal|de precos|cultural|tarifaria)|star wars|"
                            r"(blackout|apagao) (dates?|period|window)|tornado cash|hackathon")
+# Títulos que falam do tema mas não são crise acontecendo agora: história, opinião, curiosidades.
+TITLE_REJECT = re.compile(r"civil war (era|history|museum|battlefield|reenact)|during the civil war|american civil war|world war (i|ii|1|2|one|two)\b|"
+                          r"cold war|segunda guerra|primeira guerra|guerra fria|war memorial|veterans day|anniversary|aniversario|"
+                          r"guest opinion|^opinion\b|\| opinion|op-ed|letters? to the editor|editorial:|"
+                          r"astronaut|from space|movie|film|series|novel|book review|album|video game|game review")
 TITLE_WEIGHT = 4
 MAX_MENTIONS = 5  # um tema citado 50 vezes não deve valer 50 vezes mais
 
@@ -71,6 +76,8 @@ def classify(title, themes):
     """
     score, sub = Counter(), {}
     norm = normalize(title)
+    if TITLE_REJECT.search(norm):
+        return None
     if TITLE_EXCLUDE.search(norm):
         norm = TITLE_EXCLUDE.sub(" ", norm)
     for rx, tema, subtema in TITLE_RULES:

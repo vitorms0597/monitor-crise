@@ -71,7 +71,7 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: SIT
               {pageSet.has(c.iso3) ? <a href={`/pais/${c.slug}/`}>{c.nome}</a> : <span>{c.nome}</span>}
               <span class="num amber">{pct(p.variacao)}</span>
               <span class="num small">
-                {num(p.anterior)} → {num(p.total)}
+                {num(p.anterior)} → {num(p.total)} registros
               </span>
             </li>
           ))}
@@ -141,8 +141,8 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: SIT
   }
   .rising .small {
     grid-column: 1 / -1;
-    font-size: 0.8rem;
-    color: var(--ash);
+    font-size: 0.9rem;
+    color: var(--bone-dim);
   }
   .feed-wrap {
     max-width: 900px;

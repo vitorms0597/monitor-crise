@@ -3,7 +3,6 @@
 /* Papel enfumaçado de sismógrafo: fuligem, traço riscado em branco-osso, grade grafite, lápis âmbar. */
 :root {
   --soot: #121110;
-  --soot-raised: #1a1917;
   --soot-deep: #0c0b0a;
   --graphite: #2c2a27;
   --graphite-2: #3e3b37;
@@ -11,7 +10,6 @@
   --bone-dim: #b4ada0;
   --bone: #ede6d6;
   --amber: #e8a33d;
-  --amber-soft: #f3c77e;
 
   /* escala de calor: fuligem fria → brasa → branco-osso */
   --heat-0: #1f1d1b;
@@ -47,12 +45,7 @@ body {
   min-height: 100vh;
   line-height: 1.5;
   font-variant-numeric: tabular-nums;
-  /* grade milimetrada do papel do tambor */
-  background-image:
-    linear-gradient(var(--soot-deep) 1px, transparent 1px),
-    linear-gradient(90deg, var(--soot-deep) 1px, transparent 1px);
-  background-size: 24px 24px;
-  background-position: -1px -1px;
+  background: var(--soot);
 }
 
 a {

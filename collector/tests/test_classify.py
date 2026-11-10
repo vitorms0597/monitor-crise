@@ -24,6 +24,10 @@ def test_titulos(title, expected):
     "Box office: Star Wars returns",
     "Mumbai: Bombay High Court refuses permission",
     "Quarterly earnings beat expectations",
+    "Women Shaped American Agriculture During the Civil War",
+    "Russian volcano plays peek-a-boo with an astronaut",
+    "Guest opinion: wildfire season is getting longer",
+    "Lembrando os 80 anos do fim da Segunda Guerra",
 ])
 def test_usos_figurados_e_irrelevantes(title):
     assert classify(title, theme_counts("ARMEDCONFLICT,1;ARMEDCONFLICT,9")) is None

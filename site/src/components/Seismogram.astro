@@ -1,7 +1,9 @@
 ---
 // Traço de sismógrafo: cada hora é um risco espelhado em torno da linha de base;
 // a amplitude é o volume real daquela hora (notícias + eventos oficiais ponderados).
-import { hora } from '../lib/format';
+// Horas antes do início da coleta ficam em branco: ausência de dado não é calma.
+import { axisStart, collectingSince } from '../lib/data';
+import { dataHora, hora } from '../lib/format';
 
 type Band = { label: string; href?: string; values: number[]; total: number };
 interface Props {
@@ -15,66 +17,83 @@ const { bands, axis, caption, compact = false } = Astro.props;
 const STEP = compact ? 5 : 9;
 const BAND_H = compact ? 34 : 64;
 const W = axis.length * STEP;
+const start = axisStart();
+const since = collectingSince();
 const max = Math.max(1, ...bands.flatMap((b) => b.values));
 // raiz quadrada: horas calmas ainda aparecem sem que o pico esconda o resto
 const amp = (v: number) => (v <= 0 ? 0.6 : Math.max(1.2, Math.sqrt(v / max) * (BAND_H / 2 - 3)));
+const stroke = (v: number, i: number) => {
+  const x = i * STEP + STEP / 2;
+  const a = amp(v);
+  return `M${x} ${(BAND_H / 2 - a).toFixed(1)}V${(BAND_H / 2 + a).toFixed(1)}`;
+};
+const pct = (i: number) => ((i + 0.5) / axis.length) * 100;
 const fmtDay = (d: Date) =>
   d.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', weekday: 'short', day: '2-digit' }).replace('.', '');
-const ticks = axis
-  .map((d, i) => ({ d, i, h: Number(hora(d).slice(0, 2)) }))
-  .filter((t) => t.h % 6 === 0);
+const ticks = axis.map((d, i) => ({ d, i, h: Number(hora(d).slice(0, 2)) })).filter((t) => t.h % 6 === 0);
 const last = axis.at(-1);
+const x0 = start * STEP;
+const fullCaption = since && start > 0 ? `${caption} Coleta desde ${dataHora(since)}.` : caption;
 ---
 
 <figure class:list={['seismo', { compact }]}>
   <div class="rows">
     {
-      bands.map((b, bi) => (
-        <div class="row">
-          <div class="side">
-            {b.href ? (
-              <a href={b.href} class="name">
-                {b.label}
-              </a>
-            ) : (
-              <span class="name">{b.label}</span>
-            )}
-            <span class="total num">{b.total.toLocaleString('pt-BR')}</span>
+      bands.map((b, bi) => {
+        const peak = b.values.reduce((best, v, i) => (i >= start && v > b.values[best] ? i : best), Math.min(start, b.values.length - 1));
+        const hasPeak = b.values[peak] > 0;
+        return (
+          <div class="row">
+            <div class="side">
+              {b.href ? (
+                <a href={b.href} class="name">
+                  {b.label}
+                </a>
+              ) : (
+                <span class="name">{b.label}</span>
+              )}
+              <span class="total num">{b.total.toLocaleString('pt-BR')}</span>
+            </div>
+            <div class="plot">
+              <svg
+                class="trace"
+                viewBox={`0 0 ${W} ${BAND_H}`}
+                preserveAspectRatio="none"
+                role="img"
+                aria-label={`${b.label}: ${b.total.toLocaleString('pt-BR')} registros no período${hasPeak ? `; pico de ${b.values[peak].toLocaleString('pt-BR')} às ${hora(axis[peak])}` : ''}`}
+                style={`--delay:${bi * 120}ms`}
+              >
+                {ticks.map((t) => (
+                  <line class={t.h === 0 ? 'grid day' : 'grid'} x1={t.i * STEP + STEP / 2} x2={t.i * STEP + STEP / 2} y1="0" y2={BAND_H} />
+                ))}
+                {start > 0 && <rect class="void" x="0" y="0" width={x0} height={BAND_H} />}
+                <line class="base" x1={x0} x2={W} y1={BAND_H / 2} y2={BAND_H / 2} />
+                <path class="ink" d={b.values.map((v, i) => (i >= start && i !== peak ? stroke(v, i) : '')).join('')} />
+                {hasPeak && <path class="ink peak" d={stroke(b.values[peak], peak)} />}
+                <line class="needle" x1={W - 1} x2={W - 1} y1="0" y2={BAND_H} />
+              </svg>
+              {start > 0 && bi === 0 && !compact && (
+                <span class="void-label label" style={`width:${(start / axis.length) * 100}%`}>
+                  antes da coleta
+                </span>
+              )}
+              {hasPeak && !compact && (
+                <span class:list={['peak-label', 'num', { flip: pct(peak) > 78 }]} style={`left:${pct(peak)}%`}>
+                  pico {hora(axis[peak]).slice(0, 2)}h · {b.values[peak].toLocaleString('pt-BR')}
+                </span>
+              )}
+            </div>
           </div>
-          <svg
-            class="trace"
-            viewBox={`0 0 ${W} ${BAND_H}`}
-            preserveAspectRatio="none"
-            role="img"
-            aria-label={`${b.label}: ${b.total.toLocaleString('pt-BR')} registros no período; pico de ${Math.max(...b.values).toLocaleString('pt-BR')} em uma hora`}
-            style={`--delay:${bi * 120}ms`}
-          >
-            {ticks.map((t) => (
-              <line class={t.h === 0 ? 'grid day' : 'grid'} x1={t.i * STEP + STEP / 2} x2={t.i * STEP + STEP / 2} y1="0" y2={BAND_H} />
-            ))}
-            <line class="base" x1="0" x2={W} y1={BAND_H / 2} y2={BAND_H / 2} />
-            <path
-              class="ink"
-              d={b.values
-                .map((v, i) => {
-                  const x = i * STEP + STEP / 2;
-                  const a = amp(v);
-                  return `M${x} ${(BAND_H / 2 - a).toFixed(1)}V${(BAND_H / 2 + a).toFixed(1)}`;
-                })
-                .join('')}
-            />
-            <line class="needle" x1={W - 1} x2={W - 1} y1="0" y2={BAND_H} />
-          </svg>
-        </div>
-      ))
+        );
+      })
     }
   </div>
   <div class="axis" aria-hidden="true">
-    <div class="side" />
+    <div class="side"></div>
     <div class="ticks">
       {
         ticks.map((t) => (
-          <span style={`left:${((t.i + 0.5) / axis.length) * 100}%`} class={t.h === 0 ? 'day' : ''}>
+          <span style={`left:${pct(t.i)}%`} class={t.h === 0 ? 'day' : ''}>
             {t.h === 0 ? fmtDay(t.d) : `${t.h}h`}
           </span>
         ))
@@ -82,7 +101,7 @@ const last = axis.at(-1);
       {last && <span class="now amber">agora · {hora(last)}</span>}
     </div>
   </div>
-  <figcaption class="label">{caption}</figcaption>
+  <figcaption class="label">{fullCaption}</figcaption>
 </figure>
 
 <style>
@@ -128,6 +147,17 @@ const last = axis.at(-1);
     color: var(--ash);
     font-size: 0.8rem;
   }
+  .plot {
+    position: relative;
+    /* papel milimetrado do tambor: só na superfície do instrumento */
+    background-image:
+      linear-gradient(var(--soot-deep) 1px, transparent 1px),
+      linear-gradient(90deg, var(--soot-deep) 1px, transparent 1px);
+    background-size: 12px 12px;
+  }
+  .compact .plot {
+    background: none;
+  }
   .trace {
     display: block;
     width: 100%;
@@ -149,6 +179,9 @@ const last = axis.at(-1);
   .grid.day {
     stroke: var(--graphite-2);
   }
+  .void {
+    fill: var(--soot);
+  }
   .base {
     stroke: var(--graphite-2);
     stroke-width: 1;
@@ -159,6 +192,9 @@ const last = axis.at(-1);
     stroke-width: 2;
     stroke-linecap: butt;
     vector-effect: non-scaling-stroke;
+  }
+  .ink.peak {
+    stroke: var(--amber);
   }
   .compact .ink {
     stroke-width: 1.5;
@@ -179,6 +215,33 @@ const last = axis.at(-1);
     to {
       clip-path: inset(0 0 0 0);
     }
+  }
+  .void-label {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 0.7rem;
+  }
+  .peak-label {
+    position: absolute;
+    top: 1px;
+    margin-left: 6px;
+    font-size: 0.68rem;
+    font-stretch: 72%;
+    font-weight: 600;
+    color: var(--amber);
+    background: var(--soot);
+    padding: 0 3px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .peak-label.flip {
+    margin-left: 0;
+    transform: translateX(calc(-100% - 6px));
   }
   .axis {
     display: grid;
@@ -213,6 +276,9 @@ const last = axis.at(-1);
   }
   @media (max-width: 640px) {
     .ticks span:not(.day):not(.now) {
+      display: none;
+    }
+    .void-label {
       display: none;
     }
   }

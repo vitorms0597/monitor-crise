@@ -123,6 +123,39 @@ export const hourlyWorld = () =>
     return out;
   });
 
+/** Primeira hora com notícias contadas (antes disso o traço não existe, não é "calma"). */
+export const collectingSince = () =>
+  cached('since', () => {
+    let first: string | null = null;
+    let files: string[] = [];
+    try {
+      files = fs.readdirSync(path.join(DATA, 'counts')).filter((f) => f.endsWith('.json')).sort();
+    } catch {}
+    for (const f of files) {
+      const hours = Object.keys(read<Record<string, unknown>>(`counts/${f}`, {})).sort();
+      if (hours.length) {
+        first = `${f.slice(0, 10)}T${hours[0]}:00:00Z`;
+        break;
+      }
+    }
+    return first ? new Date(first) : null;
+  });
+
+/** Índice no eixo de 72h a partir do qual há coleta. */
+export const axisStart = () => {
+  const since = collectingSince();
+  if (!since) return hourAxis().length;
+  const i = hourAxis().findIndex((d) => d.getTime() >= since.getTime());
+  return i < 0 ? hourAxis().length : i;
+};
+
+/** "7 dias" só quando há 7 dias de coleta; antes disso, "desde 08/11". */
+export const longWindowLabel = () => {
+  const since = collectingSince();
+  if (!since || updatedAt().getTime() - since.getTime() >= 7 * 24 * 3600_000 - 3600_000) return '7 dias';
+  return `desde ${since.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit' })}`;
+};
+
 export const eventSlug = (id: string) => id.replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase();
 
 /** Eventos oficiais que ganham página própria. */

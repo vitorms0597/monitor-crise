@@ -4,7 +4,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import Feed from '../../components/Feed.astro';
 import { SUBTEMAS, temaById } from '../../config';
 import { countries, countryName, eventSlug, featuredEvents, feed, hasCountryPage } from '../../lib/data';
-import { dataHora, dataLonga } from '../../lib/format';
+import { coords, dataHora, dataLonga } from '../../lib/format';
 import { MAP_H, MAP_W, worldMap } from '../../lib/map';
 import { eventDescription } from '../../lib/texts';
 
@@ -16,9 +16,9 @@ const tema = temaById[e.tema];
 const country = e.pais_iso ? countries()[e.pais_iso] : null;
 const { shapes, graticule, project } = worldMap();
 const xy = e.lat !== null && e.lon !== null ? project(e.lon, e.lat) : null;
-// sem país (alto-mar ou falha global), relaciona pelo mesmo tipo de evento
-const related = (e.pais_iso ? feed({ iso: e.pais_iso, tema: e.tema, limit: 12 }) : feed({ tema: e.tema, limit: 200 }).filter((x) => x.subtema === e.subtema))
-  .filter((x) => x.id !== e.id)
+// mesmo tema e subtema; com país, só desse país. Sem nada parecido, a seção some.
+const related = feed({ iso: e.pais_iso ?? undefined, tema: e.tema, limit: 300, since: new Date(Date.now() - 7 * 24 * 3600_000) })
+  .filter((x) => x.id !== e.id && x.subtema === e.subtema)
   .slice(0, 12);
 const place = e.pais_iso ? countryName(e.pais_iso) : e.lat !== null ? 'Alto-mar' : 'Global';
 const jsonLd = {
@@ -52,7 +52,7 @@ const jsonLd = {
         Evento registrado pela fonte oficial <strong>{e.fonte}</strong> em {dataLonga(e.publicado_em)}. O nível {e.severidade} de 5 segue a
         escala do Monitor de Crises, explicada na <a href="/metodologia/">metodologia</a>.
       </p>
-      {e.lat !== null && <p class="num coords">Coordenadas: {e.lat.toFixed(2)}, {e.lon!.toFixed(2)}</p>}
+      {e.lat !== null && <p class="num coords">Coordenadas: {coords(e.lat, e.lon!)}</p>}
       <p><a class="src" href={e.fonte_url} target="_blank" rel="noopener">Ver o registro original em {e.fonte} ↗</a></p>
     </div>
     {

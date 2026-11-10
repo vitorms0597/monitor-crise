@@ -164,12 +164,6 @@ const path = Astro.url.pathname;
     height: 7px;
     border-radius: 50%;
     background: var(--amber);
-    animation: pulse 2.4s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    50% {
-      opacity: 0.3;
-    }
   }
   .nav {
     display: flex;
@@ -216,7 +210,8 @@ const path = Astro.url.pathname;
     margin-bottom: 6px;
   }
   .small {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    font-stretch: 88%;
     color: var(--bone-dim);
     margin-top: 6px;
   }

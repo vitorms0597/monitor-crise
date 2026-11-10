@@ -10,7 +10,9 @@ from .model import TEMAS
 
 EVENT_POINTS = {1: 1, 2: 3, 3: 6, 4: 10, 5: 15}
 WINDOWS = {"24h": timedelta(hours=24), "7d": timedelta(days=7)}
-MIN_TOTAL_RISING = 10  # país precisa de volume mínimo para entrar em "subindo"
+# "subindo" exige volume mínimo nos dois períodos: 1 → 10 não é uma alta de 900% que mereça destaque
+MIN_TOTAL_RISING = 20
+MIN_PREVIOUS_RISING = 10
 
 
 def _empty():
@@ -48,7 +50,8 @@ def heat(store, events, window, now=None):
         for t, v in p["temas"].items():
             temas[t] += v
     ranking = sorted(current, key=lambda i: current[i]["total"], reverse=True)
-    rising = sorted((i for i in current if current[i]["total"] >= MIN_TOTAL_RISING and current[i]["anterior"]),
+    rising = sorted((i for i in current
+                     if current[i]["total"] >= MIN_TOTAL_RISING and current[i]["anterior"] >= MIN_PREVIOUS_RISING),
                     key=lambda i: current[i]["total"] / current[i]["anterior"], reverse=True)
     return {
         "gerado_em": now.isoformat(timespec="seconds"),

@@ -4,7 +4,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import Feed from '../../components/Feed.astro';
 import Seismogram from '../../components/Seismogram.astro';
 import { TEMAS } from '../../config';
-import { countryPages, feed, heat, hourAxis, hourly } from '../../lib/data';
+import { countryPages, feed, heat, hourAxis, hourly, longWindowLabel } from '../../lib/data';
 import { num, pct } from '../../lib/format';
 import { countrySummary } from '../../lib/texts';
 
@@ -33,7 +33,7 @@ const title = `${country.nome}: guerras, ciberataques, apagões e desastres agor
     <dl class="facts">
       <div><dt class="label">últimas 24h</dt><dd class="num">{num(p24?.total ?? 0)}</dd></div>
       <div><dt class="label">variação</dt><dd class="num amber">{p24 ? pct(p24.variacao) : '—'}</dd></div>
-      <div><dt class="label">7 dias</dt><dd class="num">{num(p7?.total ?? 0)}</dd></div>
+      <div><dt class="label">{longWindowLabel()}</dt><dd class="num">{num(p7?.total ?? 0)}</dd></div>
       <div><dt class="label">posição hoje</dt><dd class="num">{pos >= 0 ? `${pos + 1}º` : '—'}</dd></div>
     </dl>
     <div class="lede">{summary.map((s) => <p>{s}</p>)}</div>

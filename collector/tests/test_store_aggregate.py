@@ -41,12 +41,19 @@ def test_eventos_antigos_vao_para_o_arquivo(tmp_path):
 
 def test_calor_soma_noticias_e_eventos_e_calcula_variacao(tmp_path):
     store = Store(tmp_path)
-    store.merge_news([news(i, hours_ago=2) for i in range(10)] +
-                     [news(100 + i, hours_ago=30) for i in range(5)], NOW)
+    store.merge_news([news(i, hours_ago=2) for i in range(30)] +
+                     [news(100 + i, hours_ago=30) for i in range(10)], NOW)
     events = [event(1, "BRA", 3), event(2, "CHL", 5)]
     h = aggregate.heat(store, events, "24h", NOW)
     bra = h["paises"]["BRA"]
-    assert bra["temas"]["energia"] == 10 and bra["temas"]["desastre"] == aggregate.EVENT_POINTS[3]
-    assert bra["anterior"] == 5 and bra["variacao"] == round((16 - 5) / 5 * 100)
+    assert bra["temas"]["energia"] == 30 and bra["temas"]["desastre"] == aggregate.EVENT_POINTS[3]
+    assert bra["anterior"] == 10 and bra["variacao"] == round((36 - 10) / 10 * 100)
     assert h["ranking"][0] == "BRA" and "BRA" in h["subindo"]
     assert h["paises"]["CHL"]["total"] == aggregate.EVENT_POINTS[5]
+
+
+def test_subindo_ignora_bases_pequenas(tmp_path):
+    store = Store(tmp_path)
+    store.merge_news([news(i, iso="QAT", hours_ago=2) for i in range(25)] +
+                     [news(100 + i, iso="QAT", hours_ago=30) for i in range(2)], NOW)
+    assert "QAT" not in aggregate.heat(store, [], "24h", NOW)["subindo"]

@@ -2,7 +2,17 @@ const TZ = 'America/Sao_Paulo';
 
 export const num = (n: number) => n.toLocaleString('pt-BR');
 
-export const pct = (v: number | null) => (v === null ? 'novo' : `${v > 0 ? '+' : ''}${num(v)}%`);
+/** Variação: até +99% em porcentagem; acima disso como multiplicador ("×13,8"), que se lê de relance. */
+export const pct = (v: number | null) => {
+  if (v === null) return 'novo';
+  if (v >= 100) return `×${(1 + v / 100).toLocaleString('pt-BR', { maximumFractionDigits: 1 })}`;
+  return `${v > 0 ? '+' : ''}${num(v)}%`;
+};
+
+export const coords = (lat: number, lon: number) => {
+  const f = (n: number) => Math.abs(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return `${f(lat)}° ${lat >= 0 ? 'N' : 'S'}, ${f(lon)}° ${lon >= 0 ? 'L' : 'O'}`;
+};
 
 export const hora = (d: Date | string) =>
   new Date(d).toLocaleTimeString('pt-BR', { timeZone: TZ, hour: '2-digit', minute: '2-digit' });
