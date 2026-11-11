@@ -1,11 +1,9 @@
 name: Coleta e deploy
 
-# Repositório privado e sem GitHub Pages por enquanto: só roda manualmente.
-# Para publicar: torne o repo público (ou use GitHub Pro), ative Pages com origem "GitHub Actions",
-# descomente o agendamento abaixo e mude a variável de repositório PUBLICAR para "sim".
+# Repositório público: minutos de Actions ilimitados. A publicação no Pages depende da variável PUBLICAR=sim.
 on:
-  # schedule:
-  #   - cron: "*/30 * * * *" # o GitHub pode atrasar alguns minutos em horário de pico
+  schedule:
+    - cron: "7,22,37,52 * * * *" # a cada 15 min, fora dos minutos cheios (o GitHub atrasa mais nos horários redondos)
   workflow_dispatch:
     inputs:
       backfill_horas:

@@ -21,20 +21,20 @@ cd site && npm install && npm run dev               # http://localhost:4321
 
 ## Publicação
 
-Hoje o repositório é privado e o site **não está publicado**. O workflow **Coleta e deploy** só roda
-manualmente (*Actions → Coleta e deploy → Run workflow*): coleta, grava os dados no branch `data` e gera o site.
+Repositório público, publicado no GitHub Pages. Como a conta tem o domínio `sbtechsoftware.com.br`
+configurado no site de usuário, o endereço é **https://sbtechsoftware.com.br/monitor-crise/**.
 
-Para publicar no GitHub Pages (`https://vitorms0597.github.io/monitor-crise/`):
-1. Torne o repositório público (Pages grátis) ou assine o GitHub Pro.
-2. *Settings → Pages → Source: GitHub Actions*.
-3. *Settings → Secrets and variables → Actions → Variables*: crie `PUBLICAR = sim`.
-4. Descomente o `schedule` no workflow (coleta a cada 30 min) e rode uma vez com `backfill_horas = 48`.
+O workflow **Coleta e deploy** roda a cada 15 minutos: coleta, grava os dados no branch `data`
+(sempre um único commit, então o repositório não cresce), gera o site e publica.
 
-Repositório privado no plano grátis tem 2.000 minutos de Actions por mês; a coleta a cada 30 min gasta
-cerca de 5.000. Se ficar privado, use um intervalo de 2 horas (`0 */2 * * *`).
+Variáveis do repositório (*Settings → Secrets and variables → Actions → Variables*):
+- `PUBLICAR = sim`: liga a publicação no Pages
+- `SITE_URL = https://sbtechsoftware.com.br`: origem usada em links canônicos, sitemap e RSS
+- `BASE_PATH` (opcional, padrão `/monitor-crise`): use `/` se o site ganhar um domínio só dele
 
-Domínio próprio: configure em *Settings → Pages → Custom domain* e crie as variáveis `SITE_URL=https://seudominio.com.br`
-e `BASE_PATH=/`.
+Para recuperar notícias perdidas, rode o workflow manualmente com `backfill_horas` (ex.: 24).
+O GitHub desativa agendamentos de repositórios públicos após 60 dias sem atividade; se chegar o
+e-mail avisando, basta reativar em *Actions*.
 
 ## Anúncios
 
