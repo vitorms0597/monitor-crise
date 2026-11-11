@@ -1,4 +1,4 @@
-/** Caminho interno com o prefixo do site (ex.: /monitor-crises no GitHub Pages; vazio em domínio próprio). */
+/** Caminho interno com o prefixo do site (ex.: /monitor-crise no GitHub Pages; vazio em domínio próprio). */
 export const u = (path: string) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}${path}`;
 
 export const SITE_NAME = 'Monitor de Crises';
@@ -11,7 +11,7 @@ export const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT ?? '';
 export const AADS_UNIT = import.meta.env.PUBLIC_AADS_UNIT ?? '';
 export const CONTACT_EMAIL: string = import.meta.env.PUBLIC_CONTACT_EMAIL ?? '';
 // sem e-mail configurado, o contato é por issues do repositório público
-export const CONTACT_URL = CONTACT_EMAIL ? `mailto:${CONTACT_EMAIL}` : 'https://github.com/vitorms0597/monitor-crises/issues';
+export const CONTACT_URL = CONTACT_EMAIL ? `mailto:${CONTACT_EMAIL}` : 'https://github.com/vitorms0597/monitor-crise/issues';
 export const CONTACT_LABEL = CONTACT_EMAIL || 'issues do projeto no GitHub';
 
 export type TemaId = 'ciber' | 'conflito' | 'energia' | 'desastre';

@@ -19,16 +19,22 @@ python3 -m venv .venv && .venv/bin/pip install httpx pytest
 cd site && npm install && npm run dev               # http://localhost:4321
 ```
 
-## Publicação (GitHub Pages)
+## Publicação
 
-O workflow **Coleta e deploy** roda a cada 30 minutos: coleta, grava os dados no branch `data`
-(sempre um único commit, então o repositório não cresce), gera o site e publica no GitHub Pages em
-`https://<usuário>.github.io/monitor-crises/`.
+Hoje o repositório é privado e o site **não está publicado**. O workflow **Coleta e deploy** só roda
+manualmente (*Actions → Coleta e deploy → Run workflow*): coleta, grava os dados no branch `data` e gera o site.
 
-- Pages precisa estar ativado com origem **GitHub Actions** (*Settings → Pages*).
-- Primeira publicação: rode o workflow manualmente com `backfill_horas = 48`.
-- Domínio próprio: configure em *Settings → Pages → Custom domain* e crie as variáveis de repositório
-  `SITE_URL=https://seudominio.com.br` e `BASE_PATH=/`.
+Para publicar no GitHub Pages (`https://vitorms0597.github.io/monitor-crise/`):
+1. Torne o repositório público (Pages grátis) ou assine o GitHub Pro.
+2. *Settings → Pages → Source: GitHub Actions*.
+3. *Settings → Secrets and variables → Actions → Variables*: crie `PUBLICAR = sim`.
+4. Descomente o `schedule` no workflow (coleta a cada 30 min) e rode uma vez com `backfill_horas = 48`.
+
+Repositório privado no plano grátis tem 2.000 minutos de Actions por mês; a coleta a cada 30 min gasta
+cerca de 5.000. Se ficar privado, use um intervalo de 2 horas (`0 */2 * * *`).
+
+Domínio próprio: configure em *Settings → Pages → Custom domain* e crie as variáveis `SITE_URL=https://seudominio.com.br`
+e `BASE_PATH=/`.
 
 ## Anúncios
 

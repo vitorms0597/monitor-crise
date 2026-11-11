@@ -1,10 +1,11 @@
 name: Coleta e deploy
 
+# Repositório privado e sem GitHub Pages por enquanto: só roda manualmente.
+# Para publicar: torne o repo público (ou use GitHub Pro), ative Pages com origem "GitHub Actions",
+# descomente o agendamento abaixo e mude a variável de repositório PUBLICAR para "sim".
 on:
-  schedule:
-    - cron: "*/30 * * * *" # o GitHub pode atrasar alguns minutos em horário de pico
-  push:
-    branches: [main]
+  # schedule:
+  #   - cron: "*/30 * * * *" # o GitHub pode atrasar alguns minutos em horário de pico
   workflow_dispatch:
     inputs:
       backfill_horas:
@@ -24,14 +25,11 @@ jobs:
   coleta:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     env:
-      # GitHub Pages: https://<usuário>.github.io/monitor-crises/. Com domínio próprio, defina as variáveis
+      # GitHub Pages: https://<usuário>.github.io/monitor-crise/. Com domínio próprio, defina as variáveis
       # do repositório SITE_URL=https://seudominio.com.br e BASE_PATH=/
       SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io', github.repository_owner) }}
-      BASE_PATH: ${{ vars.BASE_PATH || '/monitor-crises' }}
+      BASE_PATH: ${{ vars.BASE_PATH || '/monitor-crise' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -73,8 +71,18 @@ jobs:
           npx astro build
 
       - uses: actions/upload-pages-artifact@v3
+        if: vars.PUBLICAR == 'sim'
         with:
           path: site/dist
+
+  publica:
+    needs: coleta
+    if: vars.PUBLICAR == 'sim'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Publica no GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
